@@ -1,10 +1,9 @@
 package com.projeto.BackendContratanti.Controller;
 
-
-import com.projeto.BackendContratanti.Usuario.Usuario;
-import com.projeto.BackendContratanti.Usuario.UsuarioRepository;
-import com.projeto.BackendContratanti.Usuario.UsuarioRequestDTO;
-import com.projeto.BackendContratanti.Usuario.UsuarioResponseDTO;
+import com.projeto.BackendContratanti.Model.Usuario.Usuario;
+import com.projeto.BackendContratanti.Model.Usuario.UsuarioRepository;
+import com.projeto.BackendContratanti.Model.Usuario.UsuarioRequestDTO;
+import com.projeto.BackendContratanti.Model.Usuario.UsuarioResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.web.bind.annotation.*;
@@ -22,11 +21,11 @@ public class UsuarioController {
     private UsuarioRepository repository;
 
     //Faz com que aceite todas as origens e headers enviados pelo cliente, mas e melhor limitar aa origem para apenas o nosso dominio
-    //mudaar no futuro
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    //faz com que todos os requests de post dirigidos ao endpoint seja redirecionado para aqui
+    //faz com que todos os requests de post dirigidos ao endpoint seja redirecionado para está função
     @PostMapping
     public void saveUsuario(@RequestBody UsuarioRequestDTO data){
+        //converte o objeto dto para o objeto usuario
         Usuario usuariodata = new Usuario(data);
         repository.save(usuariodata);
     }
