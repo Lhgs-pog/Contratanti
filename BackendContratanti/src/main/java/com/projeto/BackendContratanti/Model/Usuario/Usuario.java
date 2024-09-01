@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
+import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;
 
@@ -24,6 +26,7 @@ import java.math.BigInteger;
 //indica que o id e a representcao unica do usuario
 @EqualsAndHashCode(of = "id")
 
+@Component
 public class Usuario {
     //Define que o id e a chave primaria e que o valor e gerado utomaticamente seguindo a estrategia identity que faz com que os valores sejam gerados me sequencia diferentemente do uid que sera aletorio, o uid e recomenddo para aplicacoes de verdade
     @Id
@@ -36,11 +39,11 @@ public class Usuario {
     private String email;
     @Column(name = "TELEFONE" ,nullable = true,length = 11)
     private String telefone;
-    @Column(name = "LINK_CURRICULO",nullable = false)
+    @Column(name = "LINK_CURRICULO",columnDefinition = "TEXT",nullable = false)
     private String url_curriculo;
-    @Column(name = "LINK_LINKEDIN",nullable = true)
+    @Column(name = "LINK_LINKEDIN",columnDefinition = "TEXT",nullable = true)
     private String url_linkedin;
-    @Column(name = "LINK_GITHUB",nullable = true)
+    @Column(name = "LINK_GITHUB",columnDefinition = "TEXT",nullable = true)
     private String url_github;
     @Column(name = "CPF",nullable = false,length = 11,unique = true)
     private String cpf;
@@ -48,7 +51,7 @@ public class Usuario {
     private String cidade;
     @Column(name = "SENHA",nullable = false,length = 30)
     private String senha;
-    @Column(name = "DESCRICAO",nullable = false)
+    @Column(name = "DESCRICAO",columnDefinition = "TEXT",nullable = false)
     private String descricao;
 
     public Usuario(UsuarioRequestDTO data){

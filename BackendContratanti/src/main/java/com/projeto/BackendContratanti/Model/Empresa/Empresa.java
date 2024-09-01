@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;
 
@@ -15,6 +16,8 @@ import java.math.BigInteger;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
+
+@Component
 public class Empresa {
 
     @Id
@@ -29,9 +32,9 @@ public class Empresa {
     private String telefone;
     @Column(name = "CNPJ",nullable = false,length = 14,unique = true)
     private String cnpj;
-    @Column(name = "DESCRICAO",nullable = true)
+    @Column(name = "DESCRICAO",columnDefinition = "TEXT",nullable = true)
     private String descricao;
-    @Column(name = "LINK_LINKEDIN",nullable = true)
+    @Column(name = "LINK_LINKEDIN",columnDefinition = "TEXT",nullable = true)
     private String url_linkedin;
     @Column(name = "SENHA",nullable = false)
     private String senha;
