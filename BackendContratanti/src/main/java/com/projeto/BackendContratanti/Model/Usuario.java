@@ -1,11 +1,10 @@
-package com.projeto.BackendContratanti.Model.Usuario;
+package com.projeto.BackendContratanti.Model;
 
+import com.projeto.BackendContratanti.Dto.UsuarioRequestDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Comment;
 import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;

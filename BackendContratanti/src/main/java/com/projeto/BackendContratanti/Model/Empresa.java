@@ -1,10 +1,10 @@
-package com.projeto.BackendContratanti.Model.Empresa;
+package com.projeto.BackendContratanti.Model;
 
 
+import com.projeto.BackendContratanti.Dto.EmpresaRequestDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 

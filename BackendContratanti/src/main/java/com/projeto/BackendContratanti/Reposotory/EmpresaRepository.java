@@ -1,5 +1,6 @@
-package com.projeto.BackendContratanti.Model.Empresa;
+package com.projeto.BackendContratanti.Reposotory;
 
+import com.projeto.BackendContratanti.Model.Empresa;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

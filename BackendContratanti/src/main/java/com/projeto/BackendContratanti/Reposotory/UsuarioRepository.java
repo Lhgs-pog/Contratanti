@@ -1,5 +1,6 @@
-package com.projeto.BackendContratanti.Model.Usuario;
+package com.projeto.BackendContratanti.Reposotory;
 
+import com.projeto.BackendContratanti.Model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

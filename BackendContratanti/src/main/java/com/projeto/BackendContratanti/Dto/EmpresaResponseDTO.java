@@ -1,4 +1,6 @@
-package com.projeto.BackendContratanti.Model.Empresa;
+package com.projeto.BackendContratanti.Dto;
+
+import com.projeto.BackendContratanti.Model.Empresa;
 
 import java.math.BigInteger;
 

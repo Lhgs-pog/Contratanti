@@ -1,10 +1,8 @@
 package com.projeto.BackendContratanti.Controller;
 
-import com.projeto.BackendContratanti.Model.Empresa.Empresa;
-import com.projeto.BackendContratanti.Model.Empresa.EmpresaRepository;
-import com.projeto.BackendContratanti.Model.Empresa.EmpresaRequestDTO;
-import com.projeto.BackendContratanti.Model.Empresa.EmpresaResponseDTO;
-import com.projeto.BackendContratanti.Model.Usuario.Usuario;
+import com.projeto.BackendContratanti.Model.Empresa;
+import com.projeto.BackendContratanti.Dto.EmpresaRequestDTO;
+import com.projeto.BackendContratanti.Dto.EmpresaResponseDTO;
 import com.projeto.BackendContratanti.Services.EmpresaServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
