@@ -3,27 +3,34 @@ package com.projeto.BackendContratanti.Model;
 
 import com.projeto.BackendContratanti.Dto.EmpresaRequestDTO;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;
+import java.util.Collection;
+import java.util.List;
 
 @Table(name = "empresa")
 @Entity(name = "empresa")
-/*@Getter*/
+//getters
+@Getter
+//setters
+@Setter
+//construtor com todos os atributos
 @AllArgsConstructor
+//construtor vazio
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 
 @Component
-public class Empresa {
+public class Empresa implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_EMPRESAS",nullable = false)
-    private BigInteger id;
+    private int id;
     @Column(name = "NOME",nullable = false,length = 50)
     private String nome;
     @Column(name = "EMAIL",nullable = false,length = 50,unique = true)
@@ -49,35 +56,42 @@ public class Empresa {
         this.senha= dto.senha();
     }
 
-    public BigInteger getId() {
-        return id;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
     }
 
-    public String getNome() {
-        return nome;
+    @Override
+    public String getPassword() {
+        return "";
     }
 
-    public String getEmail() {
+    @Override
+    public String getUsername() {
         return email;
     }
 
-    public String getTelefone() {
-        return telefone;
+    @Override
+    public boolean isAccountNonExpired() {
+        //return UserDetails.super.isAccountNonExpired();
+        return true;
     }
 
-    public String getCnpj() {
-        return cnpj;
+    @Override
+    public boolean isAccountNonLocked() {
+        //return UserDetails.super.isAccountNonLocked();
+        return true;
     }
 
-    public String getDescricao() {
-        return descricao;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        //return UserDetails.super.isCredentialsNonExpired();
+        return true;
     }
 
-    public String getUrl_linkedin() {
-        return url_linkedin;
-    }
-
-    public String getSenha() {
-        return senha;
+    @Override
+    public boolean isEnabled() {
+        //return UserDetails.super.isEnabled();
+        return true;
     }
 }

@@ -2,12 +2,15 @@ package com.projeto.BackendContratanti.Model;
 
 import com.projeto.BackendContratanti.Dto.UsuarioRequestDTO;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;
+import java.util.Collection;
+import java.util.List;
 
 //pasta para representar a tabela do banco
 
@@ -22,16 +25,20 @@ import java.math.BigInteger;
 @NoArgsConstructor
 //pede ao mombok para criar um constructor com todos os argumentos
 @AllArgsConstructor
+//getters
+@Getter
+//setters
+@Setter
 //indica que o id e a representcao unica do usuario
 @EqualsAndHashCode(of = "id")
 
 @Component
-public class Usuario {
+public class Usuario implements UserDetails {
     //Define que o id e a chave primaria e que o valor e gerado utomaticamente seguindo a estrategia identity que faz com que os valores sejam gerados me sequencia diferentemente do uid que sera aletorio, o uid e recomenddo para aplicacoes de verdade
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_USUARIOS",nullable = false)
-    private BigInteger id;
+    private int id;
     @Column( name = "NOME", nullable = false, length = 50)
     private String nome;
     @Column(name = "EMAIL" ,nullable = false,length = 50,unique = true)
@@ -52,6 +59,8 @@ public class Usuario {
     private String senha;
     @Column(name = "DESCRICAO",columnDefinition = "TEXT",nullable = false)
     private String descricao;
+    @Column(name = "role" ,nullable = false)
+    private UsuarioRoles role;
 
     public Usuario(UsuarioRequestDTO data){
         this.nome = data.nome();
@@ -65,48 +74,44 @@ public class Usuario {
         this.url_github = data.url_github();
         this.url_linkedin = data.url_linkedin();
     }
-
-    public BigInteger getId() {
-        return id;
+//tempo do video 17:40
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (this.role == UsuarioRoles.ADMIN) return List.of(new SimpleGrantedAuthority("UsuarioRoles.ADMIN"), new SimpleGrantedAuthority("UsuarioRoles.USER"));
+        return null;
     }
 
-    public String getNome() {
-        return nome;
+    @Override
+    public String getPassword() {
+        return "";
     }
 
-    public String getEmail() {
+    @Override
+    public String getUsername() {
         return email;
     }
 
-    public String getTelefone() {
-        return telefone;
+    @Override
+    public boolean isAccountNonExpired() {
+        //return UserDetails.super.isAccountNonExpired();
+        return true;
     }
 
-    public String getUrl_curriculo() {
-        return url_curriculo;
+    @Override
+    public boolean isAccountNonLocked() {
+        //return UserDetails.super.isAccountNonLocked();
+        return true;
     }
 
-    public String getUrl_linkedin() {
-        return url_linkedin;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        //return UserDetails.super.isCredentialsNonExpired();
+        return true;
     }
 
-    public String getUrl_github() {
-        return url_github;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public String getCidade() {
-        return cidade;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public String getDescricao() {
-        return descricao;
+    @Override
+    public boolean isEnabled() {
+        //return UserDetails.super.isEnabled();
+        return true;
     }
 }

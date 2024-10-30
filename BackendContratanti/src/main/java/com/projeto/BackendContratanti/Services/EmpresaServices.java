@@ -5,6 +5,7 @@ import com.projeto.BackendContratanti.Reposotory.EmpresaRepository;
 import com.projeto.BackendContratanti.Dto.EmpresaRequestDTO;
 import com.projeto.BackendContratanti.Dto.EmpresaResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -12,10 +13,14 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Service
 public class EmpresaServices {
 
     @Autowired
     private EmpresaRepository repository;
+
+    @Autowired
+    private MailServices mailServices;
 
     public List<EmpresaResponseDTO> empresaGetAAll(){
         List<EmpresaResponseDTO> listaempresa = repository.findAll().stream().map(EmpresaResponseDTO::new).toList();
@@ -29,6 +34,10 @@ public class EmpresaServices {
     public void saveEmpresa(EmpresaRequestDTO data){
         Empresa empresa = new Empresa(data);
         repository.save(empresa);
+        mailServices.enviarEmailTexto(empresa.getEmail(),
+                "Bem vindo",
+                "Obrigado por criar uma conta no nosso site, te manteremos atualizado quando uma empresa estivee interessado em você");
+
     }
 
     public Empresa empresaUpdate(Empresa emp){
