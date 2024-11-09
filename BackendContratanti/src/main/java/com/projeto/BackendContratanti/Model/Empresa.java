@@ -30,7 +30,7 @@ public class Empresa implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_EMPRESAS",nullable = false)
-    private int id;
+    private BigInteger id;
     @Column(name = "NOME",nullable = false,length = 50)
     private String nome;
     @Column(name = "EMAIL",nullable = false,length = 50,unique = true)

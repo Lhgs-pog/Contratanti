@@ -1,4 +1,6 @@
 package com.projeto.BackendContratanti.Dto;
 
-public class AuthenticationDTO {
+
+public record AuthenticationDTO(String email, String senha) {
+
 }

@@ -38,7 +38,7 @@ public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_USUARIOS",nullable = false)
-    private int id;
+    private BigInteger id;
     @Column( name = "NOME", nullable = false, length = 50)
     private String nome;
     @Column(name = "EMAIL" ,nullable = false,length = 50,unique = true)
@@ -73,6 +73,12 @@ public class Usuario implements UserDetails {
         this.url_curriculo = data.url_curriculo();
         this.url_github = data.url_github();
         this.url_linkedin = data.url_linkedin();
+    }
+
+    public Usuario(String email, String senha, UsuarioRoles role){
+        this.email = email;
+        this.senha = senha;
+        this.role = role;
     }
 //tempo do video 17:40
     @Override

@@ -1,4 +1,6 @@
 package com.projeto.BackendContratanti.Dto;
 
-public record RegisterDTO() {
+import com.projeto.BackendContratanti.Model.UsuarioRoles;
+
+public record RegisterDTO(String email, String senha, UsuarioRoles role) {
 }
