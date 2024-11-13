@@ -1,0 +1,188 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f4f8f9;
+  padding: 20px;
+}
+
+nav.menu-lateral {
+  width: 60px;
+  height: 100%;
+  background: linear-gradient(135deg, #1f5369, #48d1cc);
+  padding: 10px 0 40px 1%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  transition: width 0.3s ease-in-out;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  animation: shadowAnimation 3s infinite;
+  z-index: 10;
+}
+
+@keyframes shadowAnimation {
+  0% {
+    box-shadow: 0px 0px 10px rgb(40, 248, 161);
+  }
+  33% {
+    box-shadow: 0px 0px 20px rgb(24, 228, 255);
+  }
+  66% {
+    box-shadow: 0px 0px 20px rgb(50, 115, 255);
+  }
+  100% {
+    box-shadow: 0px 0px 10px rgb(40, 248, 161);
+  }
+}
+
+.btn-expandir {
+  width: 100%;
+  padding-left: 1px;
+  margin-bottom: 45px;
+}
+
+.btn-expandir > i {
+  color: #fff;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+nav.menu-lateral:hover {
+  width: 270px;
+  transition: width 0.3s ease-in-out;
+}
+
+ul {
+  height: 100%;
+  list-style-type: none;
+  padding: 10px 0;
+}
+
+ul li.item-menu {
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+ul li.item-menu:hover {
+  background-color: #1f5369;
+  border-radius: 8px;
+}
+
+ul li.item-menu a {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 17px;
+  padding: 14px 2px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 58px;
+  transition: padding-left 0.3s ease-in-out;
+}
+
+ul li.item-menu a:hover {
+  padding-left: 20px;
+}
+
+ul li.item-menu a .txt-link {
+  margin-left: 35px;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+nav.menu-lateral:hover ul li.item-menu a .txt-link {
+  opacity: 1;
+}
+
+ul li.item-menu a .icon > i {
+  font-size: 25px;
+}
+
+.perfil-container {
+  background-color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 50, 83, 0.1);
+  border-radius: 30px;
+  padding: 60px;
+  max-width: 790px;
+  width: 90%;
+  height: 580px;
+  margin: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.perfil-header {
+  background: linear-gradient(135deg, #1f5369, #48d1cc);
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 20px;
+  margin-bottom: 100px;
+  margin-top: -25px;
+}
+
+.perfil-dados {
+  margin-top: -50px;
+  font-size: 17px;
+}
+
+.dado {
+  margin-bottom: 29px;
+}
+
+label {
+  font-weight: bold;
+  margin-right: 20px;
+}
+
+button.btn-editar {
+  background-color: #005d69;
+  color: white;
+  font-size: 17px;
+  padding: 13px 10px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 20px;
+  width: 100%;
+  transition: background-color 0.3s ease;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button.btn-editar:hover:hover {
+  background-color: #007d8d;
+  transform: scale(0.98);
+}
+
+.editar-curriculo {
+  margin-top: 70px;
+}
+
+.custom-file-upload {
+  display: inline-block;
+  padding: 15px 20px;
+  background-color: #f0f0f0;
+  color: #037483;
+  border-radius: 10px;
+  border: 2px dashed #037483;
+  cursor: pointer;
+  text-align: center;
+  margin-bottom: 10px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.custom-file-upload:hover {
+  background-color: #dafbff;
+  border: 2px dashed #07a1b6;
+  color: #0092a5;
+}

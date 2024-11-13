@@ -42,15 +42,34 @@ public class EmpresaServices {
 
     public Empresa empresaUpdate(Empresa emp){
         repository.save(emp);
+        mailServices.enviarEmailTexto(emp.getEmail(),
+                "Assunto: Confirmação de Atualização de Dados\n",
+                "\"Prezado(a) "+ emp.getNome()+ "\n"+
+                            "Gostaríamos de informar que os dados da sua conta foram atualizados com sucesso. Agradecemos por manter suas informações em dia, o que nos ajuda a garantir uma comunicação eficiente e um atendimento mais ágil.\n"+
+                            "Se você não reconhece essa atualização ou acredita que ela foi feita por engano, por favor, entre em contato conosco o mais rápido possível para que possamos auxiliá-lo(a).\n"+
+                            "Caso tenha alguma dúvida ou precise de assistência adicional, nossa equipe está à disposição para ajudar.\n"+
+                            "Atenciosamente,\n"+
+                            "Contratanti\n");
         return emp;
     }
 
     public void empresaDeleteById(BigInteger id){
         Empresa emp = repository.getOne(id);
+        mailServices.enviarEmailTexto(emp.getEmail(),
+                "USUÁRIO EXCLUÍDO",
+                "Informamos que a sua conta foi excluída com sucesso, conforme solicitado. Todos os dados associados foram permanentemente removidos de nossos sistemas, e não será possível recuperar as informações ou o histórico da conta.\n" +
+                        "\n" +
+                        "Caso deseje retornar no futuro, será um prazer recebê-lo(a) novamente. Enquanto isso, agradecemos por ter feito parte da nossa comunidade e desejamos o melhor em seus próximos projetos.\n" +
+                        "\n" +
+                        "Se precisar de alguma assistência ou tiver dúvidas, nossa equipe de atendimento estará à disposição.\n" +
+                        "\n" +
+                        "Atenciosamente,\n" +
+                        "Contratanti\n");
         repository.delete(emp);
     }
 
     public void empresaDeleteAll(){
+
         repository.deleteAll();
     }
     //regex para permitir a entrada de somente letras e numeros, prevenindo sqlinjection e outros tipos de ataque

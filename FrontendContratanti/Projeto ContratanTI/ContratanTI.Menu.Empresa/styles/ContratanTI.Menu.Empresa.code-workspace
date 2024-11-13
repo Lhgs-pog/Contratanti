@@ -1,0 +1,15 @@
+{
+  "folders": [
+	{
+		"name": "ContratanTI.Menu.Empresa",
+		"path": ".."
+	},
+	{
+		"name": "imagens",
+		"path": "../../ContratanTI.Menu/imagens"
+	}
+],
+  "settings": {
+    "liveServer.settings.multiRootWorkspaceName": "ContratanTI.Menu.Empresa"
+  }
+}

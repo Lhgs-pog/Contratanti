@@ -1,0 +1,261 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap");
+
+/* fonte padrão do site */
+* {
+  font-family: "Montserrat";
+}
+/* Mensagem de boas vindas*/
+.bem-vindo {
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  margin-top: -53px;
+}
+/*text currículo*/
+#nameCurriculo {
+  font-size: 30px;
+  margin: 4px;
+  margin-bottom: -10px;
+  margin-top: 120px;
+  -webkit-text-stroke: 1px rgb(3, 220, 248);
+  color: rgb(255, 255, 255);
+  text-shadow: 2px 2px 5px rgba(15, 237, 253, 0.3);
+}
+
+/*Logotipo da empresa*/
+#marca-empresa {
+  font-size: 26px;
+  float: left;
+  text-align: center;
+  margin: 22px;
+  color: #f5f5f5;
+  text-shadow: 2px 2px 4px #48d1cc;
+}
+/* Barra de navegação */
+.home {
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  background: linear-gradient(90deg, #1f5369, #48d1cc);
+  text-align: center;
+  font-size: 17px;
+}
+
+/* Barra de navegação / estilização dos links*/
+.home a {
+  float: right;
+  display: block;
+  color: rgb(252, 255, 255);
+  text-align: center;
+  padding: 30px 19px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+/*logotipo do site*/
+.logotipoImg {
+  height: 150px;
+}
+
+/* Fundo da barra de busca */
+.barraDeBusca {
+  background: linear-gradient(90deg, #1f5369, #48d1cc);
+  border-radius: 7px;
+  padding: 70px;
+  box-shadow: 0 7px 8px rgba(0, 0, 0, 0.2); /* Sombra para destaque */
+  margin: 120px;
+  display: flex;
+  justify-content: center;
+  background: linear-gradient(270deg, #0ee7dc, #540383, #09cead, #650baf);
+  background-size: 800% 800%;
+  animation: gradiente-animado 15s ease infinite;
+}
+
+@keyframes gradiente-animado {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* select box com as cidades de Brasília*/
+.estadoSelect {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 2px;
+  font-size: 14px;
+  border: 1px solid #d6d6d6;
+  border-radius: 0;
+  margin-left: -1px; /* Remove a borda dupla */
+}
+
+/* Barra de busca / filtro */
+.barraDePesquisa {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 710px;
+  padding: 7px;
+  font-size: 18px;
+  border: 1px solid #ccc;
+  border-radius: 4px 0 0 4px;
+}
+
+/* Botão da barra de busca */
+.buttonDePesquisa {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 7px 33px;
+  font-size: 18px;
+  background-color: #313131;
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Botão da barra de busca - interação com o mouse*/
+.buttonDePesquisa:hover {
+  background-color: #000000;
+  transform: scale(1.1);
+}
+
+.buttonDePesquisa:hover {
+  background-color: #2c2c2c;
+}
+
+/* Define o estilo dos itens do carrossel */
+.grade-curriculos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 700px; /* Ajuste conforme necessário */
+  border: 2px solid #11cbd8;
+  border-radius: 10px;
+  padding: 50px;
+  background-color: #f0f0f0;
+  box-shadow: inset 0 0 13px rgba(12, 229, 245, 0.5);
+}
+
+.curriculo-page {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px; /* Espaçamento entre os currículos */
+}
+
+.curriculo {
+  width: 300px;
+  height: 120px;
+  border: 1px solid #38f2ff;
+  border-radius: 8px;
+  padding: 15px;
+  text-align: center;
+  background-color: #fdfdfd;
+  text-decoration: none;
+  color: #183868;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 10px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.curriculo:hover {
+  background-color: #d4f6ff;
+  transform: scale(1.05);
+}
+
+.curriculo h4 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 750;
+}
+
+.curriculo p {
+  margin: 5px 0 0;
+  color: #217ef8;
+  font-weight: 500;
+}
+
+/*
+.navigation-buttons {
+  margin-top: 20px;
+  text-align: center;
+}
+
+ configurar depois os botôes para exibir outros currículos
+.navigation-buttons button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  background-color: #11cbd8;
+  color: #ffffff;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.navigation-buttons button:hover {
+  background-color: #0a7e8c;
+}
+*/
+
+h5 {
+  margin: 0;
+  padding: 0;
+}
+
+/* Barra de navegação - interação com o mouse sobre os links*/
+.home a:hover {
+  color: #000000;
+}
+
+/* texto do site*/
+#text {
+  margin-top: -10px;
+}
+
+/* Rodapé do site*/
+footer {
+  box-shadow: 1 2px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 300px;
+  background: linear-gradient(90deg, #1f5369, #48d1cc);
+  color: white;
+  text-align: center;
+  padding: 20px;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+}
+
+/* Rodapé do site - estilização da ul*/
+footer ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+/* Rodapé do site - estilização da ul e il*/
+footer ul li {
+  display: inline;
+  margin: 0 10px;
+}
+
+/* Rodapé do site - estilização dos links */
+footer a {
+  color: #37088f;
+  text-decoration: none;
+  text-decoration: underline;
+}
+
+/* Rodapé do site - estilização dos links */
+footer a:hover {
+  text-decoration: underline;
+  color: #520dd3;
+}
