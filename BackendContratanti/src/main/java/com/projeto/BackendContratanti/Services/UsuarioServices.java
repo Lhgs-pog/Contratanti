@@ -1,5 +1,6 @@
 package com.projeto.BackendContratanti.Services;
 
+import com.projeto.BackendContratanti.Model.Empresa;
 import com.projeto.BackendContratanti.Model.Usuario;
 import com.projeto.BackendContratanti.Reposotory.UsuarioRepository;
 import com.projeto.BackendContratanti.Dto.UsuarioRequestDTO;
@@ -19,11 +20,14 @@ public class UsuarioServices {
     @Autowired
     private UsuarioRepository repository;
 
+    @Autowired
+    private MailServices mailServices;
+
     public List<UsuarioResponseDTO> usuariosGetAll(){
         List<UsuarioResponseDTO> listausuarios = repository.findAll().stream().map(UsuarioResponseDTO::new).toList();
         return listausuarios;
     }
-    public Optional<Usuario> usuariofindById(Usuario usuario, BigInteger id){
+    public Optional<Usuario> usuariofindById(BigInteger id){
         return repository.findById(id);
     }
     public void saveUsuario(UsuarioRequestDTO data){
@@ -31,9 +35,20 @@ public class UsuarioServices {
         repository.save(usuariodata);
     }
 
-    public Usuario usuarioUpdate(Usuario user){
-        repository.save(user);
-        return user;
+    public Usuario usuarioUpdate(BigInteger uid, UsuarioRequestDTO user){
+        Usuario usuario = new Usuario(user);
+        repository.save(usuario);
+
+        mailServices.enviarEmailTexto(
+                usuario.getEmail(),
+                "Confirmação de Atualização de Dados",
+                "Prezado(a) " + usuario.getNome() + ",\n\n" +
+                        "Gostaríamos de informar que os dados da sua conta foram atualizados com sucesso. " +
+                        "Se você não reconhece esta atualização, entre em contato conosco imediatamente.\n\n" +
+                        "Atenciosamente,\nEquipe Contratanti."
+        );
+
+        return usuario;
     }
 
     public void usuarioDeleteAll(){
@@ -41,8 +56,19 @@ public class UsuarioServices {
     }
 
     public void usuarioDeleteById(BigInteger id){
-        Usuario user = repository.getOne(id);
-        repository.delete(user);
+        Usuario usuario = repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Empresa não encontrada com ID: " + id));
+
+        mailServices.enviarEmailTexto(
+                usuario.getEmail(),
+                "Conta Excluída",
+                "Prezado(a) " + usuario.getNome() + ",\n\n" +
+                        "Sua conta foi excluída com sucesso. Todos os dados associados foram removidos permanentemente.\n\n" +
+                        "Agradecemos por fazer parte da nossa comunidade e esperamos vê-lo(a) novamente no futuro.\n\n" +
+                        "Atenciosamente,\nEquipe Contratanti."
+        );
+
+        repository.delete(usuario);
     }
 
     //regex para permitir a entrada de somente letras e numeros, prevenindo sqlinjection e outros tipos de ataque

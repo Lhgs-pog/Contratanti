@@ -4,63 +4,91 @@ import com.projeto.BackendContratanti.Model.Empresa;
 import com.projeto.BackendContratanti.Dto.EmpresaRequestDTO;
 import com.projeto.BackendContratanti.Dto.EmpresaResponseDTO;
 import com.projeto.BackendContratanti.Services.EmpresaServices;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Optional;
 
-//indica para o spring que está é uma classe controller
+@CrossOrigin(origins = "http://localhost:8080") // Configuração global de CORS para a classe
 @RestController
-//manda todos os requests de empresa para essa classe
-@RequestMapping("empresa")
+@RequestMapping("/empresa") // Define o prefixo dos endpoints
 public class EmpresaController {
 
-    //diz para o spring que ele tem que injetar essas dependencias
-    @Autowired
-    private EmpresaServices services;
+    private final EmpresaServices services;
 
-    //Indica os dominios e os headers permitido, está setado como todos para evitar conflito, mas dessa forma não é seguro
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
-    //indica que esté funcão é responsável pelos metodos de envio de informações da ape(post)
+    public EmpresaController(EmpresaServices services) {
+        this.services = services;
+    }
+
+    /**
+     * Salva uma nova empresa com base nos dados fornecidos.
+     *
+     * @param data Dados da empresa enviados no corpo da requisição.
+     * @return Resposta HTTP 201 (Created) se bem-sucedido.
+     */
     @PostMapping
-    public void saveEmpresa(@RequestBody EmpresaRequestDTO data){
+    public ResponseEntity<Void> saveEmpresa(@Valid @RequestBody EmpresaRequestDTO data) {
         services.saveEmpresa(data);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-    //Indica os dominios e os headers permitido, está setado como todos para evitar conflito, mas dessa forma não é seguro
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
-    //indica que está funcão é responsável por trazer as informções pela api(get)
+
+    /**
+     * Retorna uma lista de todas as empresas cadastradas.
+     *
+     * @return Lista de empresas no formato de resposta DTO.
+     */
     @GetMapping
-    //traz todos as empresas do banco
-    public List<EmpresaResponseDTO> getAll(){
-        return services.empresaGetAAll();
+    public ResponseEntity<List<EmpresaResponseDTO>> getAll() {
+        return ResponseEntity.ok(services.findAllEmpresas());
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @GetMapping("/empresas/{eid}")
-    //@ResponseBody
-    public Optional<Empresa> getbyid(@PathVariable("eid") BigInteger eid , @RequestBody Empresa empresa){
-        return services.empresaFindById(empresa ,eid);
+    /**
+     * Busca uma empresa pelo ID.
+     *
+     * @param eid ID da empresa fornecido no caminho da URL.
+     * @return Empresa encontrada ou resposta HTTP 404 se não encontrada.
+     */
+    @GetMapping("/{eid}")
+    public ResponseEntity<Empresa> getById(@PathVariable BigInteger eid) {
+        return services.empresaFindById(eid)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @DeleteMapping("/empresas/delete/{eid}")
-    public void deletePorId (@PathVariable("eid") BigInteger eid,@RequestBody BigInteger idempresa){
-        services.empresaDeleteById(eid);
+    /**
+     * Exclui uma empresa pelo ID.
+     *
+     * @param eid ID da empresa fornecido no caminho da URL.
+     * @return Resposta HTTP 204 (No Content) se bem-sucedido.
+     */
+    @DeleteMapping("/{eid}")
+    public ResponseEntity<Void> deleteById(@PathVariable BigInteger eid) {
+        services.deleteEmpresaById(eid);
+        return ResponseEntity.noContent().build();
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @DeleteMapping("/empresas/delete")
-    public void deleteAll (){
-        services.empresaDeleteAll();
+    /**
+     * Exclui todas as empresas cadastradas.
+     *
+     * @return Resposta HTTP 204 (No Content) se bem-sucedido.
+     */
+    @DeleteMapping
+    public ResponseEntity<Void> deleteAll() {
+        services.deleteAllEmpresas();
+        return ResponseEntity.noContent().build();
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @PutMapping(path = "/empresas/update", consumes = {"application/json"})
-    public Empresa updataAll(@RequestBody Empresa emp){
-        return services.empresaUpdate(emp);
+    /**
+     * Atualiza os dados de uma empresa.
+     *
+     * @param emp Dados da empresa a serem atualizados.
+     * @return Empresa atualizada.
+     */
+    @PutMapping
+    public ResponseEntity<Empresa> update(@Valid @RequestBody Empresa emp) {
+        return ResponseEntity.ok(services.updateEmpresa(emp));
     }
-
 }
-

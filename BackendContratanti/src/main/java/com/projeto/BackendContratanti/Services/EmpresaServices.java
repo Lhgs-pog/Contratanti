@@ -6,11 +6,11 @@ import com.projeto.BackendContratanti.Dto.EmpresaRequestDTO;
 import com.projeto.BackendContratanti.Dto.EmpresaResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
@@ -22,63 +22,90 @@ public class EmpresaServices {
     @Autowired
     private MailServices mailServices;
 
-    public List<EmpresaResponseDTO> empresaGetAAll(){
-        List<EmpresaResponseDTO> listaempresa = repository.findAll().stream().map(EmpresaResponseDTO::new).toList();
-        return listaempresa;
+    /**
+     * Retorna uma lista de todas as empresas cadastradas como DTOs.
+     */
+    public List<EmpresaResponseDTO> findAllEmpresas() {
+        return repository.findAll().stream()
+                .map(EmpresaResponseDTO::new)
+                .toList();
     }
 
-    public Optional<Empresa> empresaFindById(Empresa empresa, BigInteger id){
+    /**
+     * Busca uma empresa pelo ID.
+     */
+    public Optional<Empresa> findEmpresaById(BigInteger id) {
         return repository.findById(id);
     }
 
-    public void saveEmpresa(EmpresaRequestDTO data){
+    /**
+     * Salva uma nova empresa e envia e-mail de boas-vindas.
+     */
+    @Transactional
+    public void saveEmpresa(EmpresaRequestDTO data) {
         Empresa empresa = new Empresa(data);
         repository.save(empresa);
-        mailServices.enviarEmailTexto(empresa.getEmail(),
-                "Bem vindo",
-                "Obrigado por criar uma conta no nosso site, te manteremos atualizado quando uma empresa estivee interessado em você");
 
+        mailServices.enviarEmailTexto(
+                empresa.getEmail(),
+                "Bem-vindo!",
+                "Obrigado por criar uma conta no nosso site. Te manteremos atualizado quando uma empresa se interessar por você."
+        );
     }
 
-    public Empresa empresaUpdate(Empresa emp){
-        repository.save(emp);
-        mailServices.enviarEmailTexto(emp.getEmail(),
-                "Assunto: Confirmação de Atualização de Dados\n",
-                "\"Prezado(a) "+ emp.getNome()+ "\n"+
-                            "Gostaríamos de informar que os dados da sua conta foram atualizados com sucesso. Agradecemos por manter suas informações em dia, o que nos ajuda a garantir uma comunicação eficiente e um atendimento mais ágil.\n"+
-                            "Se você não reconhece essa atualização ou acredita que ela foi feita por engano, por favor, entre em contato conosco o mais rápido possível para que possamos auxiliá-lo(a).\n"+
-                            "Caso tenha alguma dúvida ou precise de assistência adicional, nossa equipe está à disposição para ajudar.\n"+
-                            "Atenciosamente,\n"+
-                            "Contratanti\n");
-        return emp;
+    /**
+     * Atualiza os dados de uma empresa e notifica o cliente via e-mail.
+     */
+    @Transactional
+    public Empresa updateEmpresa(Empresa emp) {
+        Empresa updated = repository.save(emp);
+
+        mailServices.enviarEmailTexto(
+                emp.getEmail(),
+                "Confirmação de Atualização de Dados",
+                "Prezado(a) " + emp.getNome() + ",\n\n" +
+                        "Gostaríamos de informar que os dados da sua conta foram atualizados com sucesso. " +
+                        "Se você não reconhece esta atualização, entre em contato conosco imediatamente.\n\n" +
+                        "Atenciosamente,\nEquipe Contratanti."
+        );
+
+        return updated;
     }
 
-    public void empresaDeleteById(BigInteger id){
-        Empresa emp = repository.getOne(id);
-        mailServices.enviarEmailTexto(emp.getEmail(),
-                "USUÁRIO EXCLUÍDO",
-                "Informamos que a sua conta foi excluída com sucesso, conforme solicitado. Todos os dados associados foram permanentemente removidos de nossos sistemas, e não será possível recuperar as informações ou o histórico da conta.\n" +
-                        "\n" +
-                        "Caso deseje retornar no futuro, será um prazer recebê-lo(a) novamente. Enquanto isso, agradecemos por ter feito parte da nossa comunidade e desejamos o melhor em seus próximos projetos.\n" +
-                        "\n" +
-                        "Se precisar de alguma assistência ou tiver dúvidas, nossa equipe de atendimento estará à disposição.\n" +
-                        "\n" +
-                        "Atenciosamente,\n" +
-                        "Contratanti\n");
+    /**
+     * Deleta uma empresa pelo ID e notifica o cliente.
+     */
+    @Transactional
+    public void deleteEmpresaById(BigInteger id) {
+        Empresa emp = repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Empresa não encontrada com ID: " + id));
+
+        mailServices.enviarEmailTexto(
+                emp.getEmail(),
+                "Conta Excluída",
+                "Prezado(a) " + emp.getNome() + ",\n\n" +
+                        "Sua conta foi excluída com sucesso. Todos os dados associados foram removidos permanentemente.\n\n" +
+                        "Agradecemos por fazer parte da nossa comunidade e esperamos vê-lo(a) novamente no futuro.\n\n" +
+                        "Atenciosamente,\nEquipe Contratanti."
+        );
+
         repository.delete(emp);
     }
 
-    public void empresaDeleteAll(){
-
+    /**
+     * Deleta todas as empresas cadastradas.
+     */
+    @Transactional
+    public void deleteAllEmpresas() {
         repository.deleteAll();
     }
-    //regex para permitir a entrada de somente letras e numeros, prevenindo sqlinjection e outros tipos de ataque
-    public String validarString(String linha){
-        Pattern pattern = Pattern.compile("^[A-Za-z1-9]$");
-        Matcher matcher = pattern.matcher(linha);
-        boolean matchfound = matcher.find();
-        if (matchfound)
+    /**
+     * Valida uma string para conter apenas letras e números.
+     */
+    public String validarString(String linha) {
+        if (Pattern.matches("^[A-Za-z0-9]+$", linha)) {
             return linha;
+        }
         return "";
     }
     public boolean empresaValidarCnpj(String cnpj){
@@ -140,33 +167,40 @@ public class EmpresaServices {
                 return (false);
     }
 
-    public boolean validarEmail(String email){
-        Pattern pattern = Pattern.compile(
-                "^[_A-Za-z0-9-+]+(\\.[_A-Za-z0-9-]+)*@"
-                        + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", Pattern.CASE_INSENSITIVE);
-        Matcher matcher;
-        return pattern.matcher(email).find();
+    /**
+     * Valida um e-mail.
+     */
+    public boolean validarEmail(String email) {
+        return Pattern.matches(
+                "^[\\w-.]+@[\\w-]+\\.[a-z]{2,}$",
+                email
+        );
     }
 
-    public boolean validarTelefone(String telefone){
+    /**
+     * Valida um número de telefone.
+     */
+    public boolean validarTelefone(String telefone) {
         telefone = telefone.replaceAll("\\D", "");
 
-        //verifica se tem a qtde de numeros correta
         if (!(telefone.length() >= 10 && telefone.length() <= 11)) {
             return false;
         }
-        //Se tiver 11 caracteres, verificar se começa com 9 o celular
-        if (telefone.length() == 11 && Integer.parseInt(telefone.substring(2, 3)) != 9) {
+
+        if (telefone.length() == 11 && telefone.charAt(2) != '9') {
             return false;
         }
-        //verifica se o numero foi digitado com todos os dígitos iguais
-        Pattern p = Pattern.compile(telefone.charAt(0) + "{" + telefone.length() + "}");
-        Matcher m = p.matcher(telefone);
-        if (m.find()) {
+
+        if (telefone.matches("(\\d)\\1{" + telefone.length() + "}")) {
             return false;
         }
-        //DDDs validos
-        Integer[] codigosDDD = {
+
+        // Verificar DDDs e prefixos
+        return validarDDD(telefone) && validarPrefixo(telefone);
+    }
+
+    private boolean validarDDD(String telefone) {
+        Integer[] dddsValidos = {
                 11, 12, 13, 14, 15, 16, 17, 18, 19,
                 21, 22, 24, 27, 28, 31, 32, 33, 34,
                 35, 37, 38, 41, 42, 43, 44, 45, 46,
@@ -174,14 +208,19 @@ public class EmpresaServices {
                 64, 63, 65, 66, 67, 68, 69, 71, 73,
                 74, 75, 77, 79, 81, 82, 83, 84, 85,
                 86, 87, 88, 89, 91, 92, 93, 94, 95,
-                96, 97, 98, 99};
-        //verifica se o DDD é valido
-        if (!java.util.Arrays.asList(codigosDDD).contains(Integer.parseInt(telefone.substring(0, 2)))) {
-            return false;
-        }
-        //Se o número só tiver dez digitos não é um celular e por isso o número logo após o DDD deve ser 2, 3, 4, 5 ou 7
-        Integer[] prefixos = {2, 3, 4, 5, 7};
+                96, 97, 98, 99
+        };
+        int ddd = Integer.parseInt(telefone.substring(0, 2));
+        return List.of(dddsValidos).contains(ddd);
+    }
 
-        return telefone.length() != 10 || java.util.Arrays.asList(prefixos).contains(Integer.parseInt(telefone.substring(2, 3)));
+    private boolean validarPrefixo(String telefone) {
+        Integer[] prefixosValidos = {2, 3, 4, 5, 7};
+        int prefixo = Integer.parseInt(telefone.substring(2, 3));
+        return telefone.length() != 10 || List.of(prefixosValidos).contains(prefixo);
+    }
+
+    public Optional<Empresa> empresaFindById(BigInteger eid) {
+        return repository.findById(eid);
     }
 }

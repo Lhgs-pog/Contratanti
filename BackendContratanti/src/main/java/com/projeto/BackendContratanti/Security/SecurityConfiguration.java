@@ -14,10 +14,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.List;
 
 @Configuration // Indica que esta classe é uma configuração do Spring
 @EnableWebSecurity // Ativa a configuração de segurança web para a aplicação
 public class SecurityConfiguration {
+
+    // Centralização de roles
+    private static final String ROLE_ADMIN = "ADMIN";
 
     @Autowired
     SecurityFilter securityFilter; // Injeção do filtro personalizado de segurança
@@ -27,12 +33,34 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(csfr -> csfr.disable()) // Desabilita a proteção CSRF (não necessária em APIs sem estado)
+                .cors(cors -> cors.configurationSource(request -> {
+                    CorsConfiguration config = new CorsConfiguration();
+                    config.setAllowedOrigins(List.of("http://localhost:3000")); // Domínio correto
+                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+                    config.setAllowedHeaders(List.of("*"));
+                    return config;
+                }))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Define a política de sessões como stateless (sem estado)
                 .authorizeHttpRequests(authorize -> authorize // Configuração de autorização de requisições
-                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll() // Permite o acesso à rota de login sem autenticação
-                        .requestMatchers(HttpMethod.POST, "/auth/register").permitAll() // Permite o acesso à rota de registro sem autenticação
-                        .requestMatchers(HttpMethod.POST, "/usuario").hasRole("ADMIN") // Apenas usuários com a role 'ADMIN' podem acessar esta rota
-                        .anyRequest().authenticated() // Exige autenticação para qualquer outra requisição
+
+                        // Configurações de empresa
+                        .requestMatchers(HttpMethod.DELETE, "/empresa/deleteall").hasRole(ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.PUT, "/empresa/updateall").hasRole(ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.GET, "/empresa/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/empresa/{eid}").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/empresa/delete/{eid}").authenticated()
+
+                        // Configurações de usuário
+                        .requestMatchers(HttpMethod.GET, "/usuario/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/usuario/deleteall").hasRole(ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.DELETE, "/usuario/delete/{uid}").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/usuario/update").authenticated()
+
+                        // Configurações de autenticação
+                        .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
+
+                        // Qualquer outra requisição exige autenticação
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class) // Adiciona o filtro de segurança antes do filtro de autenticação padrão
                 .build(); // Constrói a configuração de segurança
