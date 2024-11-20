@@ -56,6 +56,12 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.DELETE, "/usuario/delete/{uid}").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/usuario/update").authenticated()
 
+                        //Configurações de competencia
+                        .requestMatchers(HttpMethod.GET, "/competencias/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/competencias/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/competencias/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/competencias/**").authenticated()
+
                         // Configurações de autenticação
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
 
