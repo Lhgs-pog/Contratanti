@@ -15,7 +15,7 @@ import java.util.Optional;
 // Informa que essa classe é um controller e expõe endpoints HTTP.
 @RestController
 // Define a URL base para os endpoints relacionados ao usuário.
-@RequestMapping("/usuarios")
+@RequestMapping("/usuario")
 public class UsuarioController {
 
     // Injeta a dependência de services no controller.

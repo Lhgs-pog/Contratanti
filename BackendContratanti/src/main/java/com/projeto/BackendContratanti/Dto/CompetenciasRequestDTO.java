@@ -1,4 +1,6 @@
 package com.projeto.BackendContratanti.Dto;
 
-public record CompetenciasRequestDTO (Integer id, String nome, String email){
+import java.math.BigInteger;
+
+public record CompetenciasRequestDTO (BigInteger id, String nome, String email){
 }

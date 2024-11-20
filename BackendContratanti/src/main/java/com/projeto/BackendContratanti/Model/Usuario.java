@@ -59,7 +59,8 @@ public class Usuario implements UserDetails {
     private String senha;
     @Column(name = "DESCRICAO",columnDefinition = "TEXT",nullable = false)
     private String descricao;
-    @Column(name = "role" ,nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "roles" ,nullable = false)
     private UsuarioRoles role;
 
     public Usuario(UsuarioRequestDTO data){

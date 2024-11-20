@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @RestController
@@ -29,10 +30,26 @@ public class CopentenciasController {
     }
 
     @GetMapping("/{cid}")
-    public ResponseEntity<Competencias> getById(@PathVariable Integer id){
+    public ResponseEntity<Competencias> getById(@PathVariable BigInteger id){
         return services.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<List<Competencias>> getByEmail(@PathVariable String email){
+        List<Competencias> competencias = services.findByEmail(email);
+        if (competencias.isEmpty())
+            return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(competencias);
+    }
+
+    @GetMapping("/nome/{nome}")
+    public ResponseEntity<List<Competencias>> findByNome(@PathVariable String nome){
+        List<Competencias> competencias = services.findByNome(nome);
+        if (competencias.isEmpty())
+            return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(competencias);
     }
 
     @PostMapping
@@ -53,7 +70,7 @@ public class CopentenciasController {
     }
 
     @DeleteMapping("/{cid}")
-    public ResponseEntity<Void> deleteById(Integer id){
+    public ResponseEntity<Void> deleteById(BigInteger id){
         services.deleteCompetenciasById(id);
         return ResponseEntity.noContent().build();
     }

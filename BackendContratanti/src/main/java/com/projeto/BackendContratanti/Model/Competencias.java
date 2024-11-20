@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.stereotype.Component;
 
+import java.math.BigInteger;
+
 @Table(name = "competencias")
 @Entity(name = "competenciaas")
 @Getter
@@ -18,13 +20,13 @@ public class Competencias {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_COMPETENCIA",nullable = false)
-    private Integer id;
+    private BigInteger id;
     @Column(name = "NOME", nullable = false,length = 30)
     private String nome;
     @Column(name = "email", nullable = false, length = 50)
     private String email;
 
-    public Competencias(Integer id){
+    public Competencias(BigInteger id){
         this.id = id;
     }
 
