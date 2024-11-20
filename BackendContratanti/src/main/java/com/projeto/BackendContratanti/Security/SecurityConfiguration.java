@@ -35,7 +35,7 @@ public class SecurityConfiguration {
                 .csrf(csfr -> csfr.disable()) // Desabilita a proteção CSRF (não necessária em APIs sem estado)
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of("http://localhost:3000")); // Domínio correto
+                    config.setAllowedOrigins(List.of("http://localhost:8080")); // Domínio correto
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
                     config.setAllowedHeaders(List.of("*"));
                     return config;
@@ -60,7 +60,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
 
                         // Qualquer outra requisição exige autenticação
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class) // Adiciona o filtro de segurança antes do filtro de autenticação padrão
                 .build(); // Constrói a configuração de segurança

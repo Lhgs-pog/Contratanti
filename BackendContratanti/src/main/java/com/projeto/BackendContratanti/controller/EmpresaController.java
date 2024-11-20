@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigInteger;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:8080") // Configuração global de CORS para a classe
+@CrossOrigin(origins = "*") // Configuração global de CORS para a classe
 @RestController
 @RequestMapping("/empresa") // Define o prefixo dos endpoints
 public class EmpresaController {

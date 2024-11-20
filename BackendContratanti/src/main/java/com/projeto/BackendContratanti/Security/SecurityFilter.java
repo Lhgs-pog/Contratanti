@@ -27,8 +27,18 @@ public class SecurityFilter extends OncePerRequestFilter {
     // Método que intercepta e trata todas as requisições para verificar o token de autenticação
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
+        String requestPath = request.getRequestURI();
+
+        // Ignorar autenticação para caminhos públicos
+        if (requestPath.equals("/empresa")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         // Recupera o token da requisição
         var token = this.recoveryToken(request);
+        // Ignorar autenticação para caminhos públicos
         if (token != null) { // Se o token não for nulo, faz a validação
             var login = tokenService.validateToken(token); // Valida o token e recupera o login do usuário
             UserDetails user = usuarioRepository.findByEmail(login); // Busca o usuário no repositório pelo email
