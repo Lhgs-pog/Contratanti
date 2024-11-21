@@ -58,9 +58,9 @@ public class SecurityConfiguration {
 
                         //Configurações de competencia
                         .requestMatchers(HttpMethod.GET, "/competencias/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/competencias/**").authenticated()
-                        .requestMatchers(HttpMethod.PUT, "/competencias/**").authenticated()
-                        .requestMatchers(HttpMethod.DELETE, "/competencias/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/competencias/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/competencias/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/competencias/**").permitAll()
 
                         // Configurações de autenticação
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()

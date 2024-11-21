@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.math.BigInteger;
 
 @Table(name = "competencias")
-@Entity(name = "competenciaas")
+@Entity(name = "competencias")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -23,7 +23,7 @@ public class Competencias {
     private BigInteger id;
     @Column(name = "NOME", nullable = false,length = 30)
     private String nome;
-    @Column(name = "email", nullable = false, length = 50)
+    @Column(name = "EMAIL", nullable = false, length = 50)
     private String email;
 
     public Competencias(BigInteger id){
