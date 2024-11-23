@@ -5,6 +5,9 @@ import com.projeto.BackendContratanti.Reposotory.EmpresaRepository;
 import com.projeto.BackendContratanti.Dto.EmpresaRequestDTO;
 import com.projeto.BackendContratanti.Dto.EmpresaResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,39 +45,103 @@ public class EmpresaServices {
      * Salva uma nova empresa e envia e-mail de boas-vindas.
      */
     @Transactional
-    public void saveEmpresa(EmpresaRequestDTO data) {
+    public ResponseEntity<Object> saveEmpresa(EmpresaRequestDTO data) {
         Empresa empresa = new Empresa(data);
+
+        // Verifica se o e-mail já está registrado
+        if (this.repository.findByEmail(data.email()) != null)
+            return ResponseEntity.badRequest().build(); // Retorna erro se o e-mail já existir
+
+        //validação de telefone
+        if (!EmpresaServices.validarTelefone (empresa.getTelefone())){
+            throw new IllegalArgumentException("O telefone informado não é válido.");
+        }
+
+        // Validação de formato de email
+        if (!EmpresaServices.validarEmail (empresa.getEmail())){
+            throw new IllegalArgumentException("O email informado não é válido.");
+        }
+
+        // Validação de formato do cnpj
+        if (!EmpresaServices.validarCnpj (empresa.getCnpj())) {
+            throw new IllegalArgumentException("O cnpj informado não é válido.");
+        }
+        // Criptografa a senha antes de salvar
+        String encryptedPassword = new BCryptPasswordEncoder().encode(data.senha());
+
+        //muda a senha da empresa para a senha hash
+        empresa.setSenha(encryptedPassword);
+
+        //salva a empresa no nosso banco de dados
         repository.save(empresa);
 
+        //envia o email
         mailServices.enviarEmailTexto(
                 empresa.getEmail(),
                 "Bem-vindo!",
                 "Obrigado por criar uma conta no nosso site. Te manteremos atualizado quando uma empresa se interessar por você."
         );
+        return ResponseEntity.ok().build();
     }
+
+
 
     /**
      * Atualiza os dados de uma empresa e notifica o cliente via e-mail.
      */
     @Transactional
     public Empresa updateEmpresa(Empresa emp) {
+        // Verifica se o CNPJ já existe no banco e não pertence à mesma empresa
+        Optional<Empresa> empresaComMesmoCnpj = repository.findOptionalByCnpj(emp.getCnpj());
+        if (empresaComMesmoCnpj.isPresent() && !empresaComMesmoCnpj.get().getId().equals(emp.getId())) {
+            // Lança uma exceção caso o CNPJ já esteja sendo usado por outra empresa
+            throw new DataIntegrityViolationException("O CNPJ informado já está em uso por outra empresa.");
+        }
+
+        // Verifica se o email já está registrado no banco e não pertence à mesma empresa
+        Optional<Empresa> empresaComMesmoEmail = repository.findOptionalByEmail(emp.getEmail());
+        if (empresaComMesmoEmail.isPresent() && !empresaComMesmoEmail.get().getId().equals(emp.getId())) {
+            // Lança uma exceção caso o email já esteja em uso por outra empresa
+            throw new DataIntegrityViolationException("O email informado já está em uso por outra empresa.");
+        }
+
+        //validação de telefone
+        if (!EmpresaServices.validarTelefone (emp.getTelefone())){
+            throw new IllegalArgumentException("O telefone informado não é válido.");
+        }
+
+        // Validação de formato de email
+        if (!EmpresaServices.validarEmail (emp.getEmail())){
+            throw new IllegalArgumentException("O email informado não é válido.");
+        }
+
+        // Validação de formato do cnpj
+        if (!EmpresaServices.validarCnpj (emp.getCnpj())) {
+            throw new IllegalArgumentException("O cnpj informado não é válido.");
+        }
+        // Atualiza a empresa no banco de dados
         Empresa updated = repository.save(emp);
 
+        // Envia um e-mail informando que os dados da empresa foram atualizados com sucesso
         mailServices.enviarEmailTexto(
-                emp.getEmail(),
-                "Confirmação de Atualização de Dados",
-                "Prezado(a) " + emp.getNome() + ",\n\n" +
+                emp.getEmail(),  // Destinatário do e-mail (o e-mail da empresa)
+                "Confirmação de Atualização de Dados",  // Assunto do e-mail
+                "Prezado(a) " + emp.getNome() + ",\n\n" +  // Saudação personalizada usando o nome da empresa
                         "Gostaríamos de informar que os dados da sua conta foram atualizados com sucesso. " +
-                        "Se você não reconhece esta atualização, entre em contato conosco imediatamente.\n\n" +
-                        "Atenciosamente,\nEquipe Contratanti."
+                        "Se você não reconhece esta atualização, entre em contato conosco imediatamente.\n\n" +  // Corpo do e-mail
+                        "Atenciosamente,\nEquipe Contratanti."  // Assinatura do e-mail
         );
-
-        return updated;
+        return emp;
     }
+    public Optional<Empresa> empresaFindById(BigInteger eid) {
+        return repository.findById(eid);
+    }
+        // Reto
 
-    /**
-     * Deleta uma empresa pelo ID e notifica o cliente.
-     */
+
+        /**
+         * Deleta uma empresa pelo ID e notifica o cliente.
+         */
     @Transactional
     public void deleteEmpresaById(BigInteger id) {
         Empresa emp = repository.findById(id)
@@ -108,69 +175,51 @@ public class EmpresaServices {
         }
         return "";
     }
-    public boolean empresaValidarCnpj(String cnpj){
+    public static boolean validarCnpj(String cnpj) {
+        // Remove caracteres não numéricos
+        cnpj = cnpj.replaceAll("\\D", "");
 
-        cnpj = cnpj.replace("\\.","");
-        cnpj = cnpj.replace("\\/","");
-        cnpj = cnpj.replace("\\-","");
-
-        if (cnpj.equals("00000000000000") || cnpj.equals("11111111111111")
-                || cnpj.equals("22222222222222") || cnpj.equals("33333333333333")
-                || cnpj.equals("44444444444444") || cnpj.equals("55555555555555")
-                || cnpj.equals("66666666666666") || cnpj.equals("77777777777777")
-                || cnpj.equals("88888888888888") || cnpj.equals("99999999999999") || (cnpj.length() != 14)){
-            return (false);
+        // Verifica se o CNPJ tem exatamente 14 dígitos e não é uma sequência repetida
+        if (cnpj.length() != 14 || cnpj.matches("(\\d)\\1{13}")) {
+            return false;
         }
+
         char dig13, dig14;
-        int sm, i, r, num, peso;
+        int soma, peso, num, resto;
 
-            // Calculo do 1o. Digito Verificador
-            sm = 0;
-            peso = 2;
-            for (i = 11; i >= 0; i--) {
-                // converte o i-ésimo caractere do CNPJ em um número: // por
-                // exemplo, transforma o caractere '0' no inteiro 0 // (48 eh a
-                // posição de '0' na tabela ASCII)
-                num = (int) (cnpj.charAt(i) - 48);
-                sm = sm + (num * peso);
-                peso = peso + 1;
-                if (peso == 10)
-                    peso = 2;
-            }
+        // Cálculo do 1º dígito verificador
+        soma = 0;
+        peso = 2;
+        for (int i = 11; i >= 0; i--) {
+            num = cnpj.charAt(i) - '0'; // Converte char para número
+            soma += num * peso;
+            peso = (peso == 9) ? 2 : peso + 1; // Reinicia peso para 2 após 9
+        }
 
-            r = sm % 11;
-            if ((r == 0) || (r == 1))
-                dig13 = '0';
-            else
-                dig13 = (char) ((11 - r) + 48);
+        resto = soma % 11;
+        dig13 = (resto < 2) ? '0' : (char) ((11 - resto) + '0');
 
-            // Calculo do 2o. Digito Verificador
-            sm = 0;
-            peso = 2;
-            for (i = 12; i >= 0; i--) {
-                num = (int) (cnpj.charAt(i) - 48);
-                sm = sm + (num * peso);
-                peso = peso + 1;
-                if (peso == 10)
-                    peso = 2;
-            }
-            r = sm % 11;
-            if ((r == 0) || (r == 1))
-                dig14 = '0';
-            else
-                dig14 = (char) ((11 - r) + 48);
-            // Verifica se os dígitos calculados conferem com os dígitos
-            // informados.
-            if ((dig13 == cnpj.charAt(12)) && (dig14 == cnpj.charAt(13)))
-                return (true);
-            else
-                return (false);
+        // Cálculo do 2º dígito verificador
+        soma = 0;
+        peso = 2;
+        for (int i = 12; i >= 0; i--) {
+            num = cnpj.charAt(i) - '0';
+            soma += num * peso;
+            peso = (peso == 9) ? 2 : peso + 1;
+        }
+
+        resto = soma % 11;
+        dig14 = (resto < 2) ? '0' : (char) ((11 - resto) + '0');
+
+        // Verifica se os dígitos calculados correspondem aos dígitos fornecidos
+        return dig13 == cnpj.charAt(12) && dig14 == cnpj.charAt(13);
     }
+
 
     /**
      * Valida um e-mail.
      */
-    public boolean validarEmail(String email) {
+    public static boolean validarEmail(String email) {
         return Pattern.matches(
                 "^[\\w-.]+@[\\w-]+\\.[a-z]{2,}$",
                 email
@@ -180,7 +229,7 @@ public class EmpresaServices {
     /**
      * Valida um número de telefone.
      */
-    public boolean validarTelefone(String telefone) {
+    public static boolean validarTelefone(String telefone) {
         telefone = telefone.replaceAll("\\D", "");
 
         if (!(telefone.length() >= 10 && telefone.length() <= 11)) {
@@ -199,7 +248,7 @@ public class EmpresaServices {
         return validarDDD(telefone) && validarPrefixo(telefone);
     }
 
-    private boolean validarDDD(String telefone) {
+    private static boolean validarDDD(String telefone) {
         Integer[] dddsValidos = {
                 11, 12, 13, 14, 15, 16, 17, 18, 19,
                 21, 22, 24, 27, 28, 31, 32, 33, 34,
@@ -214,13 +263,10 @@ public class EmpresaServices {
         return List.of(dddsValidos).contains(ddd);
     }
 
-    private boolean validarPrefixo(String telefone) {
+    private static boolean validarPrefixo(String telefone) {
         Integer[] prefixosValidos = {2, 3, 4, 5, 7};
         int prefixo = Integer.parseInt(telefone.substring(2, 3));
         return telefone.length() != 10 || List.of(prefixosValidos).contains(prefixo);
     }
 
-    public Optional<Empresa> empresaFindById(BigInteger eid) {
-        return repository.findById(eid);
-    }
 }

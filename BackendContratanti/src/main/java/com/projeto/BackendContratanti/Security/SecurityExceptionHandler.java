@@ -17,6 +17,16 @@ public class SecurityExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<String> handleAuthenticationException(AuthenticationException ex) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Autenticação necessária.");
+        // Captura a mensagem de erro detalhada da exceção
+        String errorMessage = "Autenticação necessária.";
+
+        // Se a exceção contiver informações adicionais, você pode usar isso
+        if (ex.getMessage() != null) {
+            errorMessage = ex.getMessage();
+        }
+
+        // Retorna uma resposta mais detalhada com o erro
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body("Erro de autenticação: " + errorMessage);
     }
 }

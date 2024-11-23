@@ -5,6 +5,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.projeto.BackendContratanti.Model.Empresa;
 import com.projeto.BackendContratanti.Model.Usuario;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -13,56 +14,100 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-@Service // Define essa classe como um serviço, tornando-a gerenciada pelo Spring
+@Service // Define esta classe como um serviço gerenciado pelo Spring
 public class TokenService {
 
-    // Injeta o valor secreto do token a partir das configurações do aplicativo
+    // Injeta o valor do segredo para assinar os tokens a partir das configurações da aplicação
     @Value("${api.security.token.secret}")
     private String secret;
 
-    // Método para gerar um token JWT para um usuário autenticado
-    public String generateToken(Usuario usuario){
+    /**
+     * Gera um token JWT para um usuário.
+     *
+     * @param usuario Objeto do tipo Usuario.
+     * @return Token JWT gerado.
+     */
+    public String generateToken(Usuario usuario) {
         try {
-            // Define o algoritmo de criptografia HMAC usando o segredo fornecido
-            Algorithm algorithm = Algorithm.HMAC256(secret);
-
-            // Cria o token com informações do emissor, assunto e data de expiração
-            String token = JWT.create()
-                    .withIssuer("auth-api") // Define o emissor do token
-                    .withSubject(usuario.getEmail()) // Define o assunto como o email do usuário
+            Algorithm algorithm = Algorithm.HMAC256(secret); // Algoritmo de assinatura HMAC com o segredo
+            return JWT.create()
+                    .withIssuer("auth-api") // Define o emissor
+                    .withSubject(usuario.getEmail()) // Assunto do token: email do usuário
+                    .withClaim("tipo", "USUARIO") // Adiciona a claim tipo como "USUARIO"
                     .withExpiresAt(genExpirationDate()) // Define a data de expiração
-                    .sign(algorithm); // Assina o token usando o algoritmo
-
-            // Retorna o token gerado
-            return token;
+                    .sign(algorithm); // Assina o token
         } catch (JWTCreationException exception) {
-            // Lança uma exceção caso ocorra erro durante a criação do token
-            throw new RuntimeException("Erro ao gerar token", exception);
+            throw new RuntimeException("Erro ao gerar token: ", exception); // Trata erros de criação
         }
     }
 
-    // Método para validar um token JWT e extrair o assunto (email do usuário) se válido
+    /**
+     * Gera um token JWT para uma empresa.
+     *
+     * @param empresa Objeto do tipo Empresa.
+     * @return Token JWT gerado.
+     */
+    public String generateTokenForEmpresa(Empresa empresa) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secret); // Algoritmo de assinatura HMAC com o segredo
+            return JWT.create()
+                    .withIssuer("auth-api") // Define o emissor
+                    .withSubject(empresa.getEmail()) // Assunto do token: email da empresa
+                    .withClaim("tipo", "EMPRESA") // Adiciona a claim tipo como "EMPRESA"
+                    .withExpiresAt(genExpirationDate()) // Define a data de expiração
+                    .sign(algorithm); // Assina o token
+        } catch (JWTCreationException exception) {
+            throw new RuntimeException("Erro ao gerar token: ", exception); // Trata erros de criação
+        }
+    }
+
+    /**
+     * Valida um token JWT e retorna o email associado se válido.
+     *
+     * @param token Token JWT a ser validado.
+     * @return Email associado ao token se válido, ou string vazia caso inválido.
+     */
     public String validateToken(String token) {
         try {
-            // Define o algoritmo para validação usando o segredo
-            Algorithm algorithm = Algorithm.HMAC256(secret);
-
-            // Valida o token e obtém o assunto (email do usuário) se o token for válido
+            Algorithm algorithm = Algorithm.HMAC256(secret); // Algoritmo de validação
             return JWT.require(algorithm)
-                    .withIssuer("auth-api") // Verifica o emissor do token
+                    .withIssuer("auth-api") // Verifica o emissor
                     .build()
-                    .verify(token) // Verifica o token
-                    .getSubject(); // Extrai o assunto (email do usuário)
+                    .verify(token) // Valida o token
+                    .getSubject(); // Retorna o assunto (email)
         } catch (JWTVerificationException exception) {
-            // Retorna uma string vazia caso o token seja inválido
-            return "";
+            return ""; // Retorna vazio se o token for inválido
         }
     }
 
-    // Método auxiliar para gerar a data de expiração do token (2 horas a partir do momento atual)
+    /**
+     * Obtém o tipo de usuário a partir de um token JWT.
+     *
+     * @param token Token JWT.
+     * @return Tipo do usuário (ex.: "USUARIO" ou "EMPRESA").
+     */
+    public String getTipoUsuario(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secret); // Algoritmo de validação
+            return JWT.require(algorithm)
+                    .withIssuer("auth-api") // Verifica o emissor
+                    .build()
+                    .verify(token) // Valida o token
+                    .getClaim("tipo") // Obtém a claim "tipo"
+                    .asString(); // Converte para string
+        } catch (JWTVerificationException exception) {
+            return ""; // Retorna vazio se o token for inválido
+        }
+    }
+
+    /**
+     * Gera a data de expiração para o token JWT.
+     *
+     * @return Data de expiração como um objeto Instant.
+     */
     private Instant genExpirationDate() {
         return LocalDateTime.now()
-                .plusHours(2) // Define expiração para 2 horas no futuro
-                .toInstant(ZoneOffset.of("-03:00")); // Define o fuso horário como UTC-3
+                .plusHours(2) // Expira em 2 horas
+                .toInstant(ZoneOffset.of("-03:00")); // Usa o fuso horário UTC-3
     }
 }

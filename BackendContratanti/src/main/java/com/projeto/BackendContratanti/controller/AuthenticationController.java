@@ -3,21 +3,27 @@ package com.projeto.BackendContratanti.Controller;
 // Importa classes e pacotes necessários para DTOs, modelo de usuário, repositório, segurança, etc.
 import com.projeto.BackendContratanti.Dto.AuthenticationDTO;
 import com.projeto.BackendContratanti.Dto.LoginResponseDTO;
-import com.projeto.BackendContratanti.Dto.RegisterDTO;
+import com.projeto.BackendContratanti.Model.Empresa;
 import com.projeto.BackendContratanti.Model.Usuario;
 import com.projeto.BackendContratanti.Reposotory.UsuarioRepository;
 import com.projeto.BackendContratanti.Security.TokenService;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory; // Importa o logger para registrar mensagens de erro
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController // Indica que essa classe é um controlador REST
-@RequestMapping("auth") // Define o endpoint base como /auth para todos os métodos desta classe
+@RequestMapping("/auth") // Define o endpoint base como /auth para todos os métodos desta classe
 public class AuthenticationController {
+
+    // Criação do logger
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
     // Injeta o gerenciador de autenticação para validar credenciais
     @Autowired
@@ -32,38 +38,57 @@ public class AuthenticationController {
     TokenService tokenService;
 
     // Método para autenticação de usuários no endpoint /auth/login
-    @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data){
-        // Cria um token de autenticação a partir das credenciais fornecidas
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(),data.senha());
+    @PostMapping("/usuario/login")
+    public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data) {
+        try {
+            // Criação do token de autenticação usando as credenciais fornecidas
+            var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.senha());
 
-        // Autentica as credenciais usando o AuthenticationManager
-        var auth = this.authenticationManager.authenticate(usernamePassword);
+            // Tenta autenticar as credenciais fornecidas
+            var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        // Gera um token JWT para o usuário autenticado
-        var token = tokenService.generateToken((Usuario) auth.getPrincipal());
+            // Após autenticação, gera o token JWT
+            var token = tokenService.generateToken((Usuario) auth.getPrincipal());
 
-        // Retorna uma resposta com o token gerado
-        return ResponseEntity.ok(new LoginResponseDTO(token));
+            // Retorna a resposta com o token gerado
+            return ResponseEntity.ok(new LoginResponseDTO(token));
+
+        } catch (BadCredentialsException e) {
+            // Loga o erro de credenciais inválidas
+            logger.error("Credenciais inválidas para o usuário: " + data.email(), e);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas.");
+        } catch (Exception e) {
+            // Loga qualquer outro erro
+            logger.error("Erro ao processar a autenticação para o usuário: " + data.email(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao processar a autenticação.");
+        }
     }
 
-    // Método para registro de novos usuários no endpoint /auth/register
-    @PostMapping("/register")
-    public ResponseEntity registrar(@RequestBody @Valid RegisterDTO data){
-        // Verifica se o e-mail já está registrado
-        if (this.repository.findByEmail(data.email()) != null)
-            return ResponseEntity.badRequest().build(); // Retorna erro se o e-mail já existir
+    // Método para autenticação de empresas no endpoint /auth/empresa/login
+    @PostMapping("/empresa/login")
+    public ResponseEntity emplogin(@RequestBody @Valid AuthenticationDTO data){
+        try {
+            // Criação do token de autenticação usando as credenciais fornecidas
+            var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(),data.senha());
 
-        // Criptografa a senha antes de salvar
-        String encryptedPassword = new BCryptPasswordEncoder().encode(data.senha());
+            // Tenta autenticar as credenciais fornecidas
+            var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        // Cria uma nova instância de usuário com os dados fornecidos
-        Usuario usuario = new Usuario(data.email(), encryptedPassword, data.role());
+            // Após autenticação, gera o token JWT para a empresa
+            var token = tokenService.generateTokenForEmpresa((Empresa) auth.getPrincipal());
 
-        // Salva o novo usuário no banco de dados
-        this.repository.save(usuario);
+            // Retorna a resposta com o token gerado
+            return ResponseEntity.ok(new LoginResponseDTO(token));
 
-        // Retorna uma resposta de sucesso
-        return ResponseEntity.ok().build();
+        } catch (BadCredentialsException e) {
+            // Loga o erro de credenciais inválidas para a empresa
+            logger.error("Credenciais inválidas para a empresa: " + data.email(), e);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas.");
+        } catch (Exception e) {
+            // Loga qualquer outro erro para a empresa
+            logger.error("Erro ao processar a autenticação para a empresa: " + data.email(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao processar a autenticação.");
+        }
     }
+
 }

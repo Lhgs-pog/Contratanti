@@ -6,6 +6,7 @@ import com.projeto.BackendContratanti.Dto.UsuarioResponseDTO;
 import com.projeto.BackendContratanti.Services.UsuarioServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
@@ -22,6 +23,8 @@ public class UsuarioController {
     @Autowired
     private UsuarioServices services;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     // A configuração de CORS pode ser feita em um arquivo de configuração global.
     // Aqui está sendo aplicada a cada método, mas pode ser centralizada.
 
@@ -30,7 +33,10 @@ public class UsuarioController {
      */
     @PostMapping
     public ResponseEntity<Void> saveUsuario(@RequestBody UsuarioRequestDTO data) {
-        services.saveUsuario(data);
+        Usuario usuario = new Usuario(data);
+        String senhaCripitografda = passwordEncoder.encode(usuario.getSenha());
+        usuario.setSenha(senhaCripitografda);
+        services.saveUsuario(usuario);
         return ResponseEntity.status(201).build();  // Retorna status HTTP 201 (Created)
     }
 

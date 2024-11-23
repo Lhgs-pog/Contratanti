@@ -1,6 +1,7 @@
 package com.projeto.BackendContratanti.Security;
 
 // Importa classes necessárias para o filtro de autenticação
+import com.projeto.BackendContratanti.Reposotory.EmpresaRepository;
 import com.projeto.BackendContratanti.Reposotory.UsuarioRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -15,44 +16,60 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@Component // Define essa classe como um componente gerenciado pelo Spring
+@Component // Define esta classe como um componente gerenciado pelo Spring
 public class SecurityFilter extends OncePerRequestFilter {
 
     @Autowired
-    TokenService tokenService; // Injeção de dependência do serviço de tokens
+    private TokenService tokenService; // Serviço de manipulação de tokens JWT
 
     @Autowired
-    UsuarioRepository usuarioRepository; // Injeção de dependência do repositório de usuários
+    private UsuarioRepository usuarioRepository; // Repositório de usuários
 
-    // Método que intercepta e trata todas as requisições para verificar o token de autenticação
+    @Autowired
+    private EmpresaRepository empresaRepository; // Repositório de empresas
+
+    /**
+     * Intercepta e processa todas as requisições para verificar o token de autenticação.
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String token = recoveryToken(request);
+        if (token != null) {
+            String email = tokenService.validateToken(token);
+            String tipoUsuario = tokenService.getTipoUsuario(token);
 
-        String requestPath = request.getRequestURI();
+            if ("USUARIO".equals(tipoUsuario)) {
+                UserDetails user = usuarioRepository.findByEmail(email);
+                if (user == null) {
+                    // Caso o usuário não seja encontrado
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Usuário não encontrado.");
+                    return;
+                }
 
-        // Ignorar autenticação para caminhos públicos
-        if (requestPath.equals("/empresa")) {
-            filterChain.doFilter(request, response);
-            return;
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } else if ("EMPRESA".equals(tipoUsuario)) {
+                UserDetails empresa = empresaRepository.findByEmail(email);
+                if (empresa == null) {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Empresa não encontrada.");
+                    return;
+                }
+
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(empresa, null, empresa.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
         }
-
-        // Recupera o token da requisição
-        var token = this.recoveryToken(request);
-        // Ignorar autenticação para caminhos públicos
-        if (token != null) { // Se o token não for nulo, faz a validação
-            var login = tokenService.validateToken(token); // Valida o token e recupera o login do usuário
-            UserDetails user = usuarioRepository.findByEmail(login); // Busca o usuário no repositório pelo email
-
-            // Cria uma autenticação para o usuário encontrado e define as autoridades
-            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication); // Define a autenticação no contexto de segurança
-        }
-        filterChain.doFilter(request, response); // Continua o fluxo do filtro
+        filterChain.doFilter(request, response);
     }
 
-    // Método auxiliar para extrair o token JWT do cabeçalho da requisição
-    public String recoveryToken(HttpServletRequest request) {
-        var authHeader = request.getHeader("Authorization"); // Recupera o cabeçalho de autorização
+    /**
+     * Recupera o token JWT do cabeçalho de autorização da requisição.
+     *
+     * @param request Objeto HttpServletRequest.
+     * @return Token JWT sem o prefixo "Bearer ", ou null se não existir.
+     */
+    private String recoveryToken(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization"); // Cabeçalho Authorization
         if (authHeader == null) return null; // Retorna null se o cabeçalho não estiver presente
         return authHeader.replace("Bearer ", ""); // Remove o prefixo "Bearer " e retorna o token puro
     }

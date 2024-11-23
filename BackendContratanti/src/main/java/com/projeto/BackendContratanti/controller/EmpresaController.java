@@ -1,12 +1,18 @@
 package com.projeto.BackendContratanti.Controller;
 
+import com.projeto.BackendContratanti.Dto.AuthenticationDTO;
+import com.projeto.BackendContratanti.Dto.LoginResponseDTO;
 import com.projeto.BackendContratanti.Model.Empresa;
 import com.projeto.BackendContratanti.Dto.EmpresaRequestDTO;
 import com.projeto.BackendContratanti.Dto.EmpresaResponseDTO;
+import com.projeto.BackendContratanti.Security.TokenService;
 import com.projeto.BackendContratanti.Services.EmpresaServices;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
@@ -16,6 +22,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/empresa") // Define o prefixo dos endpoints
 public class EmpresaController {
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    // Injeta o serviço de token para geração de tokens de autenticação
+    @Autowired
+    TokenService tokenService;
 
     private final EmpresaServices services;
 
@@ -90,5 +103,20 @@ public class EmpresaController {
     @PutMapping
     public ResponseEntity<Empresa> update(@Valid @RequestBody Empresa emp) {
         return ResponseEntity.ok(services.updateEmpresa(emp));
+    }
+
+    @PostMapping("/empresa/login")
+    public ResponseEntity emplogin(@RequestBody @Valid AuthenticationDTO data){
+        // Cria um token de autenticação a partir das credenciais fornecidas
+        var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(),data.senha());
+
+        // Autentica as credenciais usando o AuthenticationManager
+        var auth = this.authenticationManager.authenticate(usernamePassword);
+
+        // Gera um token JWT para o usuário autenticado
+        var token = tokenService.generateTokenForEmpresa((Empresa) auth.getPrincipal());
+
+        // Retorna uma resposta com o token gerado
+        return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 }
