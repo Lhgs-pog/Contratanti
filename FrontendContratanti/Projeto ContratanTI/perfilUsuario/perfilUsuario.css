@@ -110,13 +110,13 @@ ul li.item-menu a .icon > i {
 .perfil-container {
   background-color: #ffffff;
   box-shadow: 0 4px 10px rgba(0, 50, 83, 0.1);
-  border-radius: 30px;
+  border-radius: 10px;
   padding: 60px;
-  max-width: 790px;
-  width: 90%;
-  height: 580px;
+  width: 900px;
+  height: 650px;
   margin: 20px;
   backdrop-filter: blur(10px);
+  overflow: hidden;
 }
 
 .perfil-header {
@@ -125,30 +125,53 @@ ul li.item-menu a .icon > i {
   padding: 10px;
   border-radius: 10px;
   text-align: center;
-  font-size: 20px;
-  margin-bottom: 100px;
+  font-size: 18px;
+  margin-bottom: 87px;
   margin-top: -25px;
 }
 
 .perfil-dados {
   margin-top: -50px;
   font-size: 17px;
+  border: 1px solid #ccc; /* Borda geral do container */
+  border-radius: 10px;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 50, 83, 0.1);
 }
 
 .dado {
-  margin-bottom: 29px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 10px;
+  font-size: 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.dado:last-child {
+  border-bottom: none; /* Remove a borda do último item */
 }
 
 label {
   font-weight: bold;
-  margin-right: 20px;
+  color: #333;
+}
+
+#nome,
+#email,
+#senha,
+#curriculo {
+  font-weight: 500;
+  color: #555;
+  text-align: right;
 }
 
 button.btn-editar {
   background-color: #005d69;
   color: white;
   font-size: 17px;
-  padding: 13px 10px;
+  padding: 12px 10px;
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -159,12 +182,33 @@ button.btn-editar {
 }
 
 button.btn-editar:hover:hover {
-  background-color: #007d8d;
+  background-color: #017888;
   transform: scale(0.98);
 }
 
+/* Edição do currículo - lado direito */
 .editar-curriculo {
-  margin-top: 70px;
+  flex: 1;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 30px;
+  background-color: #ffffff;
+  width: 780px;
+  box-shadow: 0 4px 10px rgba(0, 50, 83, 0.1);
+}
+
+.editar-curriculo h3 {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
 }
 
 .custom-file-upload {
@@ -176,13 +220,17 @@ button.btn-editar:hover:hover {
   border: 2px dashed #037483;
   cursor: pointer;
   text-align: center;
-  margin-bottom: 10px;
   width: 100%;
-  margin-top: 20px;
 }
 
 .custom-file-upload:hover {
   background-color: #dafbff;
   border: 2px dashed #07a1b6;
   color: #0092a5;
+}
+
+.divisoria {
+  width: 1px;
+  background-color: #ccc;
+  margin: 20px 0;
 }

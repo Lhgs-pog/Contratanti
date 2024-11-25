@@ -43,7 +43,7 @@ public class Empresa implements UserDetails {
     private String descricao;
     @Column(name = "LINK_LINKEDIN",columnDefinition = "TEXT",nullable = true)
     private String url_linkedin;
-    @Column(name = "SENHA",nullable = false)
+    @Column(name = "SENHA",nullable = false, length = 100)
     private String senha;
 
     public Empresa(EmpresaRequestDTO dto){

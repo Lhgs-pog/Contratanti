@@ -9,75 +9,84 @@
 
 body {
   font-family: "Poppins", sans-serif;
-  background: linear-gradient(
-    135deg,
-    #00bcd4,
-    #1de9b6,
-    #3326a7,
-    #1cfcb1,
-    #633cf1
-  );
+  background-color: #ebf5fd;
   background-size: 500% 500%;
-  animation: gradient-background 10s ease infinite;
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-@keyframes gradient-background {
+@keyframes shadowAnimation {
   0% {
-    background-position: 0% 50%;
+    box-shadow: 0px 0px 10px rgb(40, 248, 161);
   }
-  50% {
-    background-position: 100% 50%;
+  33% {
+    box-shadow: 0px 0px 20px rgb(24, 228, 255);
+  }
+  66% {
+    box-shadow: 0px 0px 20px rgb(50, 115, 255);
   }
   100% {
-    background-position: 0% 50%;
+    box-shadow: 0px 0px 10px rgb(40, 248, 161);
   }
 }
 
 .support-container {
-  background: #fff;
+  background: #fafafa;
   padding: 40px;
-  border-radius: 12px;
+  border-radius: 30px;
   width: 800px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  animation: shadowAnimation 3s infinite;
 }
 
-/* Alinhando o container-primary à esquerda */
+/* Estilizando container-primary */
 .container-primary {
   background-color: #037483;
   color: #fff;
   font-size: 14px;
-  padding: 70px; /* Ajuste de padding para espaçamento interno */
+  height: 400px;
+  padding: 40px;
   border: 1px solid transparent;
   border-radius: 8px;
   font-weight: 700;
   letter-spacing: 0.5px;
-  text-transform: uppercase;
-  text-align: left; /* Alinha o texto à esquerda */
-  margin: 10px 250px; /* Ajuste de margem superior/inferior */
-  max-width: 340px; /* Controlando a largura do container */
+  text-align: left;
+  margin: 10px 20px;
+  max-width: 340px;
   position: absolute;
-  top: 100px; /* Controle a altura a partir do topo */
-  left: 50px; /* Controle a distância da esquerda */
-  display: flex; /* Usando flexbox para alinhamento */
-  flex-direction: column; /* Certifique-se de que os textos estejam empilhados verticalmente */
-  justify-content: center; /* Centraliza verticalmente os elementos */
+  top: 100px;
+  left: 289px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Espaçamento entre os elementos */
 }
 
+/* Estilizando o título principal */
 h1 {
-  font-size: 24px;
+  font-size: 30px;
   color: #ffffff;
   margin-bottom: 20px;
 }
 
+/* Estilizando subtítulo */
+h2 {
+  font-size: 20px;
+  color: #ffffff;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+/* Estilizando os parágrafos */
 p {
-  color: #7ad6fa;
-  margin-bottom: 9px;
+  color: #b3e8ff;
+  margin-bottom: 8px;
+  font-size: 16px;
+  font-weight: 400;
 }
 
 .right-section {
@@ -86,19 +95,19 @@ p {
 }
 
 .input-group {
-  margin-bottom: 25px;
+  margin-bottom: 35px;
   text-align: left;
 }
 
 .input-group label {
-  font-size: 14px;
+  font-size: 15px;
   color: #555;
 }
 
 .input-group input,
 .input-group textarea {
   width: 100%;
-  padding: 15px;
+  padding: 20px;
   border-radius: 8px;
   border: 1px solid #ccc;
   font-size: 14px;
@@ -108,7 +117,7 @@ p {
 
 .input-group input:focus,
 .input-group textarea:focus {
-  border-color: rgb(51, 222, 228);
+  border-color: rgb(3, 187, 194);
 }
 
 textarea {
@@ -120,15 +129,17 @@ textarea {
   background-color: #1f5369;
   color: #fff;
   border: none;
-  padding: 12px 100px;
+  padding: 14px 100px;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
   width: 100%;
+  transition: background-color 0.3s ease, transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .submit-btn:hover {
-  background-color: #1b84b1;
+  background-color: #058b92;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 @keyframes fadeIn {

@@ -1,5 +1,6 @@
 package com.projeto.BackendContratanti.Controller;
 
+import com.projeto.BackendContratanti.Dto.SuportEmailDTO;
 import com.projeto.BackendContratanti.Model.Usuario;
 import com.projeto.BackendContratanti.Dto.UsuarioRequestDTO;
 import com.projeto.BackendContratanti.Dto.UsuarioResponseDTO;
@@ -28,17 +29,6 @@ public class UsuarioController {
     // A configuração de CORS pode ser feita em um arquivo de configuração global.
     // Aqui está sendo aplicada a cada método, mas pode ser centralizada.
 
-    /**
-     * Endpoint para salvar um novo usuário.
-     */
-    @PostMapping
-    public ResponseEntity<Void> saveUsuario(@RequestBody UsuarioRequestDTO data) {
-        Usuario usuario = new Usuario(data);
-        String senhaCripitografda = passwordEncoder.encode(usuario.getSenha());
-        usuario.setSenha(senhaCripitografda);
-        services.saveUsuario(usuario);
-        return ResponseEntity.status(201).build();  // Retorna status HTTP 201 (Created)
-    }
 
     /**
      * Endpoint para retornar todos os usuários.
@@ -61,6 +51,41 @@ public class UsuarioController {
                 .orElseGet(() -> ResponseEntity.status(404).build());  // Retorna 404 caso não encontrado
     }
 
+    /**
+     * Endpoint para retornar uma lista de ysyarios com um limite de 30
+     */
+    @GetMapping("/exibicao")
+    public ResponseEntity<List<UsuarioResponseDTO>> getListaExibicao(){
+        List<UsuarioResponseDTO> list = services.buscarComLimite();
+
+        return ResponseEntity.ok(list);
+    }
+
+    /**
+     * Endpoint para retornar lista de usuários de acordo com as competencias pesquisadas
+     */
+    @GetMapping("/filtro")
+    public List<UsuarioResponseDTO> filtrarUsuariosPorCompetencias(@RequestParam List<String> competencias) {
+        return services.buscarUsuariosPorCompetencias(competencias);
+    }
+
+    /**
+     * Endpoint para salvar um novo usuário.
+     */
+    @PostMapping
+    public ResponseEntity<Void> saveUsuario(@RequestBody UsuarioRequestDTO data) {
+        Usuario usuario = new Usuario(data);
+        String senhaCripitografda = passwordEncoder.encode(usuario.getSenha());
+        usuario.setSenha(senhaCripitografda);
+        services.saveUsuario(usuario);
+        return ResponseEntity.status(201).build();  // Retorna status HTTP 201 (Created)
+    }
+
+    @PostMapping("/suporte")
+    public ResponseEntity<Void> suporteEmail(@RequestBody SuportEmailDTO data){
+        services.enviarEmailSuporte(data);
+        return ResponseEntity.status(201).build();
+    }
     /**
      * Endpoint para atualizar os dados de um usuário.
      */

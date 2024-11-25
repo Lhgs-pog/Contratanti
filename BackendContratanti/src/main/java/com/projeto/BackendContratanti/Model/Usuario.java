@@ -55,7 +55,7 @@ public class Usuario implements UserDetails {
     private String cpf;
     @Column(name = "CIDADE_NOME",nullable = true,length = 255)
     private String cidade;
-    @Column(name = "SENHA",nullable = false,length = 30)
+    @Column(name = "SENHA",nullable = false,length = 100)
     private String senha;
     @Column(name = "DESCRICAO",columnDefinition = "TEXT",nullable = false)
     private String descricao;

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang = "pt-BR">
+<html lang="pt-BR">
 <head>
-    <meta charset = "UTF-8">
-    <meta name = "viewport" content = "width = device-width, initial-scale = 1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/styles/menu.css">
     <title>ContratanTI</title>
 </head>
@@ -11,12 +11,12 @@
  <!-- Barra de navegação -->
 <nav> 
     <ul>
-        <div class = "home">
-            <h1 id = "marca-empresa"> ContratanTI</h1>
-            <a href = "#home"><h5>CHAT</h5></a>
-            <a href = "#about"><h5>PERFIL</h5></a>
-            <a href = "#services"><h5>CURRÍCULO</h5></a>
-            <a href = "#contact"><h5>INÍCIO</h5></a>
+        <div class="home">
+            <img src="imagens/Logotipo (11).png" id="logo-tipo" alt="Logo">
+            <a href="#home"><h5>CHAT</h5></a>
+            <a href="#about"><h5>PERFIL</h5></a>
+            <a href="#services"><h5>CURRÍCULO</h5></a>
+            <a href="#contact"><h5>INÍCIO</h5></a>
         </ul>
     </div>
 </nav>    
@@ -25,117 +25,126 @@
 <!-- <form action="/nosso-endpoint" method="POST" style="display: flex; align-items: center;"> -->
     <div class="barraDeBusca">
         <input type="text" placeholder="Buscar..." class="barraDePesquisa">
-    <select class = "estadoSelect">
-        <option value = "">Selecione a cidade</option>
-        <option value = "Àguas Claras">Àguas Claras</option>
-        <option value = "Asa Norte">Asa Norte</option>
-        <option value = "Asa Sul">Asa Sul</option>
-        <option value = "Bandeirante">Bandeirante</option>
-        <option value = "Brazlândia">Brazlândia</option>
-        <option value = "Candogolândia">Candogolândia</option>
-        <option value = "Ceilândia">Ceilândia</option>
-        <option value = "Gama">Gama</option>
-        <option value = "Guará">Guará</option>
-        <option value = "Lago Norte">Lago Norte</option>
-        <option value = "Lago Sul">Lago Sul</option>
-        <option value = "Núcleo Bandeirante">Núcleo Bandeirante</option>
-        <option value = "Paranoá">Paranoá</option>
-        <option value = "Planaltina">Planaltina</option>
-        <option value = "Recanto das Emas">Recanto das Emas</option>
-        <option value = "Riacho Fundo 1">Riacho Fundo 1</option>
-        <option value = "Riacho Fundo 2">Riacho Fundo 2</option>
-        <option value = "São Sebastião">São Sebastião</option>
-        <option value = "Samanbaia">Samanbaia</option>
-        <option value = "Santa Maria">Santa Maria</option>
-        <option value = "Taguatinga">Taguatinga</option>
+    <select class="estadoSelect">
+        <option value="">Selecione a cidade</option>
+        <option value="Àguas Claras">Àguas Claras</option>
+        <option value="Asa Norte">Asa Norte</option>
+        <option value="Asa Sul">Asa Sul</option>
+        <option value="Bandeirante">Bandeirante</option>
+        <option value="Brazlândia">Brazlândia</option>
+        <option value="Candogolândia">Candogolândia</option>
+        <option value="Ceilândia">Ceilândia</option>
+        <option value="Gama">Gama</option>
+        <option value="Guará">Guará</option>
+        <option value="Lago Norte">Lago Norte</option>
+        <option value="Lago Sul">Lago Sul</option>
+        <option value="Núcleo Bandeirante">Núcleo Bandeirante</option>
+        <option value="Paranoá">Paranoá</option>
+        <option value="Planaltina">Planaltina</option>
+        <option value="Recanto das Emas">Recanto das Emas</option>
+        <option value="Riacho Fundo 1">Riacho Fundo 1</option>
+        <option value="Riacho Fundo 2">Riacho Fundo 2</option>
+        <option value="São Sebastião">São Sebastião</option>
+        <option value="Samanbaia">Samanbaia</option>
+        <option value="Santa Maria">Santa Maria</option>
+        <option value="Taguatinga">Taguatinga</option>
     </select>
-        <button type = "submit" class = "buttonDePesquisa" value = "Filtrar ">Filtrar</button>
+        <button type="submit" class="buttonDePesquisa" value="Filtrar">Filtrar</button>
     <!-- </form> -->
 </div>
    
     <!-- Mensagem de bem-vindo -->
-    <div class = "bem-vindo">
-        <img src = "imagens/logotipoMenu.png" class = logotipoImg />
+    <div class="bem-vindo">
+        <img src="imagens/logotipoMenu.png" class="logotipoImg" />
         <h1>Bem-vindo ao ContratanTI!</h1>
-        <p id = "text">Conectando talentos a oportunidades de inovação.</p>
+        <p id="text">Conectando talentos a oportunidades de inovação.</p>
     </div>
-
 
     <!-- texto de apresentação -->
-    <h1 id = "nameCurriculo"></br>Currículos</br></br></h1>
+    <h1 id="nameCurriculo"></br>Currículos</br></br></h1>
    
- 
     <!-- Div dos currículos -->
-<div class="grade-curriculos">
-    <div id="curriculoPage1" class="curriculo-page active">
-        <a href="pagina1.html" class="curriculo">
-            <h4>João da Silva</h4>
-            <p>Desenvolvedor Web</p>
-        </a>
-        <a href="pagina2.html" class="curriculo">
-            <h4>Maria Oliveira</h4>
-            <p>Analista de Sistemas</p>
-        </a>
-        <a href="pagina3.html" class="curriculo">
-            <h4>Pedro Santos</h4>
-            <p>Gerente de Projetos</p>
-        </a>
-        <a href="pagina4.html" class="curriculo">
-            <h4>Ana Costa</h4>
-            <p>Designer Gráfico</p>
-        </a>
-        <a href="pagina5.html" class="curriculo">
-            <h4>Lucas Almeida</h4>
-            <p>Desenvolvedor Java</p>
-        </a>
-        <a href="pagina6.html" class="curriculo">
-            <h4>Fernanda Lima</h4>
-            <p>Consultora de TI</p>
-        </a>
-        <a href="pagina7.html" class="curriculo">
-            <h4>Ricardo Pereira</h4>
-            <p>Desenvolvedor Backend</p>
-        </a>
-        <a href="pagina8.html" class="curriculo">
-            <h4>Juliana Martins</h4>
-            <p>Desenvolvedora FullStack</p>
-        </a>
-        <a href="pagina9.html" class="curriculo">
-            <h4>Bruno Ferreira</h4>
-            <p>Desenvolvedor Backend</p>
-        </a>
-        <a href="pagina10.html" class="curriculo">
-            <h4>Paula Souza</h4>
-            <p>Analista de Requisitos</p>
-        </a>
-        <a href="pagina11.html" class="curriculo">
-            <h4>Felipe Castro</h4>
-            <p>Engenheiro de Software</p>
-        </a>
-        <a href="pagina12.html" class="curriculo">
-            <h4>Isabela Lima</h4>
-            <p>Analista de Sistemas</p>
-        </a>
+    <div class="grade-curriculos">
+        <div id="curriculoPage1" class="curriculo-page active">
+            <a href="pagina1.html" class="curriculo">
+                <h4>João da Silva</h4>
+                <p>Desenvolvedor Web</p>
+            </a>
+            <a href="pagina2.html" class="curriculo">
+                <h4>Maria Oliveira</h4>
+                <p>Analista de Sistemas</p>
+            </a>
+            <a href="pagina3.html" class="curriculo">
+                <h4>Pedro Santos</h4>
+                <p>Gerente de Projetos</p>
+            </a>
+            <a href="pagina4.html" class="curriculo">
+                <h4>Ana Costa</h4>
+                <p>Designer Gráfico</p>
+            </a>
+            <a href="pagina5.html" class="curriculo">
+                <h4>Lucas Almeida</h4>
+                <p>Desenvolvedor Java</p>
+            </a>
+            <a href="pagina6.html" class="curriculo">
+                <h4>Fernanda Lima</h4>
+                <p>Consultora de TI</p>
+            </a>
+            <a href="pagina7.html" class="curriculo">
+                <h4>Ricardo Pereira</h4>
+                <p>Desenvolvedor Backend</p>
+            </a>
+            <a href="pagina8.html" class="curriculo">
+                <h4>Juliana Martins</h4>
+                <p>Desenvolvedora FullStack</p>
+            </a>
+            <a href="pagina9.html" class="curriculo">
+                <h4>Bruno Ferreira</h4>
+                <p>Desenvolvedor Backend</p>
+            </a>
+            <a href="pagina10.html" class="curriculo">
+                <h4>Paula Souza</h4>
+                <p>Analista de Requisitos</p>
+            </a>
+            <a href="pagina11.html" class="curriculo">
+                <h4>Felipe Castro</h4>
+                <p>Engenheiro de Software</p>
+            </a>
+            <a href="pagina12.html" class="curriculo">
+                <h4>Isabela Lima</h4>
+                <p>Analista de Sistemas</p>
+            </a>
+        </div>
     </div>
-</div>
 
-<!-- Botões de Navegação 
-<div class="navigation-buttons">
-    <button onclick="showPage('curriculoPage1')">Página 1</button>
-    <button onclick="showPage('curriculoPage2')">Página 2</button>
-</div>
--->
-
-    <!-- rodapé do site-->
-    <footer>
-        <ul>
-            <li><a href="#privacy">Política de Privacidade</a></li>
-            <li><a href="#terms">Termos de Uso</a></li>
-            <li><a href="#contact">Suporte</a></li>
+ <!-- Rodapé -->
+<footer>
+    <div class="footer-content">
+      <!-- Tópico Sobre com Links em Linha -->
+      <div class="footer-section">
+        <h4>Sobre</h4>
+        <ul class="footer-links">
+          <li><a href="#">Sobre nós</a></li>
+          <li class="divider">|</li>
+          <li><a href="#">Termos de Serviço</a></li>
+          <li class="divider">|</li>
+          <li><a href="#">Política de Privacidade</a></li>
+          <li class="divider">|</li>
+          <li><a href="#">Ajuda</a></li>
         </ul>
-            <p>&copy; 2024 ContratanTI - Todos os direitos reservados.</p>
-            <p>Desenvolvido pela equipe ContratanTI.</p>
-    </footer>
-   
+      </div>
+  
+      <!-- Seção de Texto de Crédito -->
+      <div class="footer-section">
+        <p>Desenvolvido pela equipe <a href="#">ContratanTI</a> | Potencializando carreiras, impulsionando negócios.</p>
+      </div>
+  
+      <!-- Seção de Copyright -->
+      <div class="footer-section">
+        <p>&copy; 2024 ContratanTI. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+  
 </body>
 </html>

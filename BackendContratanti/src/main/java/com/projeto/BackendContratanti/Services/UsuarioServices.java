@@ -1,6 +1,6 @@
 package com.projeto.BackendContratanti.Services;
 
-import com.projeto.BackendContratanti.Model.Empresa;
+import com.projeto.BackendContratanti.Dto.SuportEmailDTO;
 import com.projeto.BackendContratanti.Model.Usuario;
 import com.projeto.BackendContratanti.Reposotory.UsuarioRepository;
 import com.projeto.BackendContratanti.Dto.UsuarioRequestDTO;
@@ -8,8 +8,10 @@ import com.projeto.BackendContratanti.Dto.UsuarioResponseDTO;
 import com.projeto.BackendContratanti.Security.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +40,32 @@ public class UsuarioServices {
     // Retorna um usuário a partir do ID (utilizando BigInteger como tipo de ID)
     public Optional<Usuario> usuariofindById(BigInteger id) {
         return repository.findById(id);
+    }
+
+    // Retorna uma lista de usuários para a parte de exibição de curriculos na página principal
+    public List<UsuarioResponseDTO> buscarComLimite(){
+        Pageable pageable = PageRequest.of(0, 30);
+        return repository.buscarComLimite(pageable);
+    }
+
+    public List<UsuarioResponseDTO> buscarUsuariosPorCompetencias(List<String> competencias) {
+        return repository.buscarUsuariosPorCompetencias(competencias, (long) competencias.size());
+    }
+
+    public void enviarEmailSuporte(SuportEmailDTO data){
+        mailServices.enviarEmailTexto(
+                data.email(),
+                "Suporte contratanti",
+                "Prezado(a) " + data.nome() + ",\n\n" +
+                        "Gostariamos de aguadecer por entrar em contato com o nosso suporte tecnico, resolveremos a sua solicitação o quanto antes\n\n" +
+                        "Atenciosamente,\nEquipe Contratanti."
+        );
+        mailServices.enviarEmailTexto(
+                "contratanti@gmail.com",
+                "Suporte contratanti",
+                "Foi enivado do usuário" + data.nome() + ",\n\n" +
+                        "uma mensagem o nosso suporte, conteúdo: " + data.mensagem()
+        );
     }
 
     // Salva um novo usuário no banco de dados após realizar validações e criptografar a senha

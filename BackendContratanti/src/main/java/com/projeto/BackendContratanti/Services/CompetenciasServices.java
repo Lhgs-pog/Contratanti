@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.text.Normalizer;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CompetenciasServices {
@@ -44,6 +46,8 @@ public class CompetenciasServices {
         return repository.findByNome(nome);
     }
 
+
+
     @Transactional
     public void saveCompetencias(CompetenciasRequestDTO data){
         Competencias competencias = new Competencias(data);
@@ -67,4 +71,31 @@ public class CompetenciasServices {
     public void deleteAllCompetencias(){
         repository.deleteAll();
     }
+
+    public class CompetenciaUtils {
+
+        public static List<String> padronizarCompetencias(List<String> competencias) {
+            if (competencias == null || competencias.isEmpty()) {
+                return List.of();
+            }
+
+            return competencias.stream()
+                    .map(CompetenciaUtils::removerAcentos)
+                    .map(String::toLowerCase)
+                    .collect(Collectors.toList());
+        }
+
+        private static String removerAcentos(String texto) {
+            if (texto == null) {
+                return null;
+            }
+
+            // Normaliza o texto para decompor caracteres com acentos
+            String textoNormalizado = Normalizer.normalize(texto, Normalizer.Form.NFD);
+
+            // Remove os caracteres que não sejam letras ou números (inclui remoção dos diacríticos)
+            return textoNormalizado.replaceAll("\\p{M}", "");
+        }
+    }
+
 }

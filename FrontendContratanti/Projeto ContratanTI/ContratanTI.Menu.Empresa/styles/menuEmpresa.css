@@ -4,6 +4,12 @@
 * {
   font-family: "Montserrat";
 }
+
+/* Para garantir que o corpo do site tenha um layout fixo */
+body {
+  overflow-x: hidden; /* Impede rolagem horizontal */
+}
+
 /* Mensagem de boas vindas*/
 .bem-vindo {
   text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
@@ -16,19 +22,14 @@
   margin: 4px;
   margin-bottom: -10px;
   margin-top: 120px;
-  -webkit-text-stroke: 1px rgb(3, 220, 248);
-  color: rgb(255, 255, 255);
-  text-shadow: 2px 2px 5px rgba(15, 237, 253, 0.3);
+  color: #2e80a3;
 }
 
 /*Logotipo da empresa*/
-#marca-empresa {
-  font-size: 26px;
+#logo-tipo {
+  max-height: 80px;
+  width: auto;
   float: left;
-  text-align: center;
-  margin: 22px;
-  color: #f5f5f5;
-  text-shadow: 2px 2px 4px #48d1cc;
 }
 /* Barra de navegação */
 .home {
@@ -38,7 +39,7 @@
   left: 0;
   width: 100%;
   overflow: hidden;
-  background: linear-gradient(90deg, #1f5369, #48d1cc);
+  background: #1f5369;
   text-align: center;
   font-size: 17px;
 }
@@ -54,6 +55,9 @@
   transition: color 0.3s ease;
 }
 
+.home a:hover {
+  color: #75efff !important;
+}
 /*logotipo do site*/
 .logotipoImg {
   height: 150px;
@@ -65,10 +69,10 @@
   border-radius: 7px;
   padding: 70px;
   box-shadow: 0 7px 8px rgba(0, 0, 0, 0.2); /* Sombra para destaque */
-  margin: 120px;
+  margin: 140px;
   display: flex;
   justify-content: center;
-  background: linear-gradient(270deg, #0ee7dc, #540383, #09cead, #650baf);
+  background: linear-gradient(270deg, #0ee7dc, #1f5369, #09cead, #4e32b4);
   background-size: 800% 800%;
   animation: gradiente-animado 15s ease infinite;
 }
@@ -115,13 +119,11 @@
   border: none;
   border-radius: 0 4px 4px 0;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 /* Botão da barra de busca - interação com o mouse*/
 .buttonDePesquisa:hover {
   background-color: #000000;
-  transform: scale(1.1);
 }
 
 .buttonDePesquisa:hover {
@@ -131,15 +133,16 @@
 /* Define o estilo dos itens do carrossel */
 .grade-curriculos {
   display: flex;
+  overflow: hidden;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 700px; /* Ajuste conforme necessário */
-  border: 2px solid #11cbd8;
   border-radius: 10px;
   padding: 50px;
-  background-color: #f0f0f0;
-  box-shadow: inset 0 0 13px rgba(12, 229, 245, 0.5);
+  background-color: #f3f3f3;
+  box-shadow: 0 0 13px #3792b9;
+  border: 2px solid hsl(189, 100%, 84%);
 }
 
 .curriculo-page {
@@ -179,7 +182,7 @@
 
 .curriculo p {
   margin: 5px 0 0;
-  color: #217ef8;
+  color: #0077ff;
   font-weight: 500;
 }
 
@@ -222,40 +225,98 @@ h5 {
   margin-top: -10px;
 }
 
-/* Rodapé do site*/
+/* Rodapé */
 footer {
-  box-shadow: 1 2px 10px rgba(0, 0, 0, 0.1);
-  margin-top: 300px;
-  background: linear-gradient(90deg, #1f5369, #48d1cc);
+  background: #1f5369;
+  margin-top: 400px;
+  height: 200px;
   color: white;
   text-align: center;
-  padding: 20px;
+  padding: 30px 20px;
   position: relative;
   bottom: 0;
   width: 100%;
 }
 
-/* Rodapé do site - estilização da ul*/
-footer ul {
+/* Container principal do rodapé */
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: -10px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Seção do rodapé */
+.footer-section {
+  flex: 1 1 100%; /* Ocupa a largura completa */
+  padding: 10px;
+}
+
+/* Título das seções do rodapé */
+.footer-section h4 {
+  font-size: 18px;
+  margin-bottom: 30px;
+  font-weight: bold;
+}
+/* Links do rodapé organizados em uma linha */
+.footer-links {
   list-style-type: none;
   padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center; /* Centraliza os links horizontalmente */
+  align-items: center; /* Alinha verticalmente */
+  gap: 15px; /* Espaçamento entre os links */
+  margin-top: -10px; /* Move os links para cima */
 }
 
-/* Rodapé do site - estilização da ul e il*/
-footer ul li {
-  display: inline;
-  margin: 0 10px;
+/* Itens da lista */
+.footer-links li {
+  display: inline; /* Garante que fiquem em linha */
 }
 
-/* Rodapé do site - estilização dos links */
-footer a {
-  color: #37088f;
+/* Estilo dos links */
+.footer-links li a {
+  color: #75efff;
   text-decoration: none;
-  text-decoration: underline;
+  font-size: 14px;
+  transition: color 0.3s ease;
+  font-weight: 500;
 }
 
-/* Rodapé do site - estilização dos links */
+/* Efeito ao passar o mouse nos links */
+.footer-links li a:hover {
+  color: #fff; /* Muda a cor ao passar o mouse */
+}
+
+/* Divisores entre os links */
+.footer-links .divider {
+  color: #ccc; /* Cor cinza para os divisores */
+  font-size: 14px;
+}
+
+/* Texto de crédito */
+.footer-section p {
+  font-size: 14px;
+  color: #ccc;
+  margin-top: 10px;
+}
+
+footer a {
+  color: #75efff;
+  text-decoration: none;
+}
+
 footer a:hover {
   text-decoration: underline;
-  color: #520dd3;
+  color: #fff;
+}
+
+/* Estilo do copyright */
+.footer-section p {
+  font-size: 14px;
+  color: #ccc;
+  margin-top: 10px;
 }
