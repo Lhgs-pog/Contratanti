@@ -1,0 +1,72 @@
+FORMULARIO HTML
+
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="login.css" />
+    <title>Login Usuário</title>
+  </head>
+
+  <body>
+    <div class="container" id="container">
+      <div class="form-container sign-up">
+	<form action="/usuario" method="POST">
+	  <h1 id="criar-conta">Criar uma Conta</h1>
+	  <span> Use seu email para se registrar</span>
+	  <input type="text" name="nome" placeholder="Nome" required autocomplete="name" />
+	  <input type="email" name="email" placeholder="Email" required autocomplete="email" />
+	  <input type="password" name="senha" placeholder="Senha" required autocomplete="new-password" />
+	  <button type="submit">Inscreva-se</button>
+	</form>
+      </div>
+      <div class="form-container sign-in">
+        <form>
+          <h1 id="login-conta">Login</h1>
+          <span> Use seu email e senha para entrar</span>
+          <input
+            type="email"
+            placeholder="Email"
+            required
+            autocomplete="email"
+          />
+          <input
+            type="password"
+            placeholder="Senha"
+            required
+            autocomplete="current-password"
+          />
+          <a id="senha" href="#">Esqueceu sua senha?</a>
+          <button type="submit">Entrar</button>
+        </form>
+      </div>
+      <div class="alternar-container">
+        <div class="alternar">
+          <div class="alternar-painel alternar-esquerda">
+            <h1>Bem-Vindo ao ContratanTI!</h1>
+            <p>
+              Crie sua conta no nosso site e tenha acesso às melhores
+              oportunidades de emprego em TI em Brasília!
+            </p>
+            <button class="hidden" id="login">Entrar</button>
+          </div>
+          <div class="alternar-painel alternar-direita">
+            <h1>Bem-Vindo ao ContratanTI!</h1>
+            <p>
+              Ainda não tem cadastro? Inscreva-se agora e tenha acesso às
+              melhores oportunidades de emprego em TI!
+            </p>
+            <button class="hidden" id="register">Inscreva-se</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="login.js"></script>
+  </body>
+</html>
