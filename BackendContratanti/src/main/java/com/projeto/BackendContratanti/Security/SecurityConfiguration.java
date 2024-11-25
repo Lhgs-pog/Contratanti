@@ -45,12 +45,15 @@ public class SecurityConfiguration {
                         // Autorização para endpoints de empresa (sem ROLE_EMPRESA, mas com permissão para alguns endpoints)
                         .requestMatchers(HttpMethod.DELETE, "/empresa/deleteall").hasRole(ROLE_ADMIN)
                         .requestMatchers(HttpMethod.PUT, "/empresa/updateall").hasRole(ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.PUT, "/empresa/{eid}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/empresa/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/empresa/delete/{eid}").permitAll()
 
                         // Autorização para endpoints de usuário
                         .requestMatchers(HttpMethod.GET, "/usuario/**").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/usuario/delete/{uid}").authenticated() // Deletar usuário autenticado
+                        .requestMatchers(HttpMethod.DELETE, "/usuario/delete/{uid}").permitAll() // Deletar usuário autenticado
                         .requestMatchers(HttpMethod.PUT, "/usuario/update").authenticated() // Atualizar usuário autenticado
+                        .requestMatchers(HttpMethod.PUT, "/usuario/{uid}").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/usuario/deleteall").hasRole(ROLE_ADMIN) // Deletar todos usuários (admin)
 
                         // Autorização para endpoints de competência
@@ -64,6 +67,10 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/auth/usuario/login").permitAll()
 
                         // Qualquer outra requisição exige autenticação
+                        .requestMatchers(HttpMethod.GET, "/").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/").permitAll()
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class) // Filtro de segurança

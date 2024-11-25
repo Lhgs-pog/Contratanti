@@ -43,9 +43,8 @@ public class EmpresaController {
      * @return Resposta HTTP 201 (Created) se bem-sucedido.
      */
     @PostMapping
-    public ResponseEntity<Void> saveEmpresa(@Valid @RequestBody EmpresaRequestDTO data) {
-        services.saveEmpresa(data);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<Empresa> saveEmpresa(@Valid @RequestBody EmpresaRequestDTO data) {
+        return services.saveEmpresa(data);
     }
 
     /**
@@ -100,9 +99,9 @@ public class EmpresaController {
      * @param emp Dados da empresa a serem atualizados.
      * @return Empresa atualizada.
      */
-    @PutMapping
-    public ResponseEntity<Empresa> update(@Valid @RequestBody Empresa emp) {
-        return ResponseEntity.ok(services.updateEmpresa(emp));
+    @PutMapping("/{eid}")
+    public ResponseEntity<Empresa> update(@PathVariable("eid") BigInteger eid,@Valid @RequestBody Empresa emp) {
+        return ResponseEntity.ok(services.updateEmpresa(eid,emp));
     }
 
     @PostMapping("/empresa/login")

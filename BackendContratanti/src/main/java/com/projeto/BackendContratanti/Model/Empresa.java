@@ -48,9 +48,9 @@ public class Empresa implements UserDetails {
 
     public Empresa(EmpresaRequestDTO dto){
         this.nome=dto.nome();
-        this.cnpj= dto.cnpj();
         this.email=dto.email();
         this.telefone= dto.telefone();
+        this.cnpj= dto.cnpj();
         this.descricao= dto.descricao();
         this.url_linkedin= dto.url_linkedin();
         this.senha= dto.senha();

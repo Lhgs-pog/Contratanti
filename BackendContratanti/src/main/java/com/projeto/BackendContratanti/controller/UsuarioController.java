@@ -54,20 +54,22 @@ public class UsuarioController {
     /**
      * Endpoint para retornar uma lista de ysyarios com um limite de 30
      */
+/*
     @GetMapping("/exibicao")
     public ResponseEntity<List<UsuarioResponseDTO>> getListaExibicao(){
         List<UsuarioResponseDTO> list = services.buscarComLimite();
 
         return ResponseEntity.ok(list);
     }
-
+*/
     /**
      * Endpoint para retornar lista de usuários de acordo com as competencias pesquisadas
      */
+    /*
     @GetMapping("/filtro")
     public List<UsuarioResponseDTO> filtrarUsuariosPorCompetencias(@RequestParam List<String> competencias) {
         return services.buscarUsuariosPorCompetencias(competencias);
-    }
+    }*/
 
     /**
      * Endpoint para salvar um novo usuário.

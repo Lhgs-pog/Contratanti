@@ -23,9 +23,11 @@ public interface UsuarioRepository extends JpaRepository<Usuario, BigInteger> {
 
     Optional<Usuario> findByCpf(String cpf);
 
+/*
     @Query(value = "SELECT new com.example.dto.UsuarioResponseDTO(u.id, u.nome, u.email) FROM Usuario u")
     List<UsuarioResponseDTO> buscarComLimite(Pageable pageable);
-
+*/
+    /*
     @Query("SELECT new com.projeto.BackendContratanti.Dto.UsuarioResponseDTO(" +
             "    u.id, u.nome, u.email, u.telefone, u.url_curriculo, u.url_linkedin, " +
             "    u.url_github, u.cpf, u.cidade, u.senha, u.descricao) " +
@@ -40,5 +42,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, BigInteger> {
     List<UsuarioResponseDTO> buscarUsuariosPorCompetencias(
             @Param("competencias") List<String> competencias,
             @Param("quantidade") Long quantidade);
+            */
 
 }

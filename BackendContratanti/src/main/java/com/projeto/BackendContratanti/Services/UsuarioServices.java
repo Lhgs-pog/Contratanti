@@ -43,14 +43,15 @@ public class UsuarioServices {
     }
 
     // Retorna uma lista de usuários para a parte de exibição de curriculos na página principal
+/*
     public List<UsuarioResponseDTO> buscarComLimite(){
         Pageable pageable = PageRequest.of(0, 30);
         return repository.buscarComLimite(pageable);
-    }
+    }/*
 
     public List<UsuarioResponseDTO> buscarUsuariosPorCompetencias(List<String> competencias) {
         return repository.buscarUsuariosPorCompetencias(competencias, (long) competencias.size());
-    }
+    }*/
 
     public void enviarEmailSuporte(SuportEmailDTO data){
         mailServices.enviarEmailTexto(
@@ -73,8 +74,12 @@ public class UsuarioServices {
         Usuario usuariodata = new Usuario(data);
 
         // Verifica se o e-mail já está registrado, retornando erro caso já exista
-        if (this.repository.findByEmail(data.email()) != null)
+        if (data.email() == null)
+            throw new IllegalArgumentException("O email não pode ser nulo");
+
+        if (this.repository.findByEmail(data.email()) != null){
             return ResponseEntity.badRequest().build(); // Retorna erro 400 se o e-mail já existir
+        }
 
         //validação de telefone
         if (!EmpresaServices.validarTelefone (usuariodata.getTelefone())){
@@ -139,12 +144,16 @@ public class UsuarioServices {
         usuarioExistente.setSenha(encryptedPassword);
 
         //validação de telefone
-        if (!EmpresaServices.validarTelefone (usuarioExistente.getTelefone())){
+        if (usuarioExistente.getTelefone() == null) {
+
+        } else if (!EmpresaServices.validarTelefone (usuarioExistente.getTelefone())){
             throw new IllegalArgumentException("O telefone informado não é válido.");
         }
 
         // Validação de formato de email
-        if (!EmpresaServices.validarEmail (usuarioExistente.getEmail())){
+        if (usuarioExistente.getEmail() == null) {
+            throw new IllegalArgumentException("O email não pode ser nulo");
+        }else if (!EmpresaServices.validarEmail (usuarioExistente.getEmail())){
             throw new IllegalArgumentException("O email informado não é válido.");
         }
 
@@ -259,6 +268,11 @@ public class UsuarioServices {
 
     // Valida um número de telefone, garantindo que ele siga um formato correto
     public boolean validarTelefone(String telefone) {
+        // Verifica se o telefone é nulo ou vazio
+        if (telefone == null || telefone.isBlank()) {
+            return false; // Considera inválido se for nulo ou vazio
+        }
+
         telefone = telefone.replaceAll("\\D", "");  // Remove caracteres não numéricos
 
         // Verifica se o telefone tem a quantidade correta de dígitos

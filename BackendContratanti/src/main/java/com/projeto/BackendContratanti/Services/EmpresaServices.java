@@ -4,6 +4,7 @@ import com.projeto.BackendContratanti.Model.Empresa;
 import com.projeto.BackendContratanti.Reposotory.EmpresaRepository;
 import com.projeto.BackendContratanti.Dto.EmpresaRequestDTO;
 import com.projeto.BackendContratanti.Dto.EmpresaResponseDTO;
+import com.projeto.BackendContratanti.Security.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -45,44 +46,43 @@ public class EmpresaServices {
      * Salva uma nova empresa e envia e-mail de boas-vindas.
      */
     @Transactional
-    public ResponseEntity<Object> saveEmpresa(EmpresaRequestDTO data) {
+    public ResponseEntity<Empresa> saveEmpresa(EmpresaRequestDTO data) {
+        if (data.email() == null || data.email().isBlank()) {
+            throw new IllegalArgumentException("O email não pode ser nulo ou vazio");
+        }
+
+        if (repository.findByEmail(data.email()) != null) {
+            throw new IllegalArgumentException("O email já está registrado");
+        }
+
+        if (data.email() == null){
+
+        }else if (!EmpresaServices.validarTelefone(data.telefone())) {
+            throw new IllegalArgumentException("O telefone informado não é válido");
+        }
+
+        if (!EmpresaServices.validarEmail(data.email())) {
+            throw new IllegalArgumentException("O email informado não é válido");
+        }
+
+        if (!EmpresaServices.validarCnpj(data.cnpj())) {
+            throw new IllegalArgumentException("O CNPJ informado não é válido");
+        }
+
         Empresa empresa = new Empresa(data);
+        empresa.setSenha(new BCryptPasswordEncoder().encode(data.senha()));
 
-        // Verifica se o e-mail já está registrado
-        if (this.repository.findByEmail(data.email()) != null)
-            return ResponseEntity.badRequest().build(); // Retorna erro se o e-mail já existir
-
-        //validação de telefone
-        if (!EmpresaServices.validarTelefone (empresa.getTelefone())){
-            throw new IllegalArgumentException("O telefone informado não é válido.");
-        }
-
-        // Validação de formato de email
-        if (!EmpresaServices.validarEmail (empresa.getEmail())){
-            throw new IllegalArgumentException("O email informado não é válido.");
-        }
-
-        // Validação de formato do cnpj
-        if (!EmpresaServices.validarCnpj (empresa.getCnpj())) {
-            throw new IllegalArgumentException("O cnpj informado não é válido.");
-        }
-        // Criptografa a senha antes de salvar
-        String encryptedPassword = new BCryptPasswordEncoder().encode(data.senha());
-
-        //muda a senha da empresa para a senha hash
-        empresa.setSenha(encryptedPassword);
-
-        //salva a empresa no nosso banco de dados
         repository.save(empresa);
 
-        //envia o email
         mailServices.enviarEmailTexto(
                 empresa.getEmail(),
                 "Bem-vindo!",
                 "Obrigado por criar uma conta no nosso site. Te manteremos atualizado quando uma empresa se interessar por você."
         );
-        return ResponseEntity.ok().build();
+
+        return ResponseEntity.ok(empresa);
     }
+
 
 
 
@@ -90,49 +90,68 @@ public class EmpresaServices {
      * Atualiza os dados de uma empresa e notifica o cliente via e-mail.
      */
     @Transactional
-    public Empresa updateEmpresa(Empresa emp) {
-        // Verifica se o CNPJ já existe no banco e não pertence à mesma empresa
-        Optional<Empresa> empresaComMesmoCnpj = repository.findOptionalByCnpj(emp.getCnpj());
-        if (empresaComMesmoCnpj.isPresent() && !empresaComMesmoCnpj.get().getId().equals(emp.getId())) {
-            // Lança uma exceção caso o CNPJ já esteja sendo usado por outra empresa
+    public Empresa updateEmpresa(BigInteger eid, Empresa empAtualizada) {
+        // Busca a empresa pelo ID
+        Empresa empresaExistente = repository.findById(eid)
+                .orElseThrow(() -> new ResourceNotFoundException("Empresa não encontrada"));
+
+        // Verifica se o CNPJ já está em uso por outra empresa
+        Optional<Empresa> empresaComMesmoCnpj = repository.findOptionalByCnpj(empAtualizada.getCnpj());
+        if (empresaComMesmoCnpj.isPresent() && !empresaComMesmoCnpj.get().getId().equals(eid)) {
             throw new DataIntegrityViolationException("O CNPJ informado já está em uso por outra empresa.");
         }
 
-        // Verifica se o email já está registrado no banco e não pertence à mesma empresa
-        Optional<Empresa> empresaComMesmoEmail = repository.findOptionalByEmail(emp.getEmail());
-        if (empresaComMesmoEmail.isPresent() && !empresaComMesmoEmail.get().getId().equals(emp.getId())) {
-            // Lança uma exceção caso o email já esteja em uso por outra empresa
+        // Verifica se o e-mail já está em uso por outra empresa
+        Optional<Empresa> empresaComMesmoEmail = repository.findOptionalByEmail(empAtualizada.getEmail());
+        if (empresaComMesmoEmail.isPresent() && !empresaComMesmoEmail.get().getId().equals(eid)) {
             throw new DataIntegrityViolationException("O email informado já está em uso por outra empresa.");
         }
 
-        //validação de telefone
-        if (!EmpresaServices.validarTelefone (emp.getTelefone())){
+        // Validação de telefone
+        if (empAtualizada.getTelefone() == null){
+
+        }else if (empAtualizada.getTelefone() == null || !EmpresaServices.validarTelefone(empAtualizada.getTelefone())) {
             throw new IllegalArgumentException("O telefone informado não é válido.");
         }
 
         // Validação de formato de email
-        if (!EmpresaServices.validarEmail (emp.getEmail())){
+        if (empAtualizada.getEmail() == null || !EmpresaServices.validarEmail(empAtualizada.getEmail())) {
             throw new IllegalArgumentException("O email informado não é válido.");
         }
 
-        // Validação de formato do cnpj
-        if (!EmpresaServices.validarCnpj (emp.getCnpj())) {
-            throw new IllegalArgumentException("O cnpj informado não é válido.");
+        // Validação de formato do CNPJ
+        if (!EmpresaServices.validarCnpj(empAtualizada.getCnpj())) {
+            throw new IllegalArgumentException("O CNPJ informado não é válido.");
         }
-        // Atualiza a empresa no banco de dados
-        Empresa updated = repository.save(emp);
 
-        // Envia um e-mail informando que os dados da empresa foram atualizados com sucesso
+        // Criptografa a nova senha do usuário
+        String encryptedPassword = new BCryptPasswordEncoder().encode(empAtualizada.getSenha());
+
+        // Atualiza os dados da empresa
+        empresaExistente.setNome(empAtualizada.getNome());
+        empresaExistente.setEmail(empAtualizada.getEmail());
+        empresaExistente.setCnpj(empAtualizada.getCnpj());
+        empresaExistente.setTelefone(empAtualizada.getTelefone());
+        empresaExistente.setDescricao(empAtualizada.getDescricao());
+        empresaExistente.setSenha(encryptedPassword);
+
+        // Salva a empresa atualizada no banco de dados
+        Empresa empresaAtualizada = repository.save(empresaExistente);
+
+        // Envia um e-mail confirmando a atualização dos dados
         mailServices.enviarEmailTexto(
-                emp.getEmail(),  // Destinatário do e-mail (o e-mail da empresa)
-                "Confirmação de Atualização de Dados",  // Assunto do e-mail
-                "Prezado(a) " + emp.getNome() + ",\n\n" +  // Saudação personalizada usando o nome da empresa
+                empresaAtualizada.getEmail(),
+                "Confirmação de Atualização de Dados",
+                "Prezado(a) " + empresaAtualizada.getNome() + ",\n\n" +
                         "Gostaríamos de informar que os dados da sua conta foram atualizados com sucesso. " +
-                        "Se você não reconhece esta atualização, entre em contato conosco imediatamente.\n\n" +  // Corpo do e-mail
-                        "Atenciosamente,\nEquipe Contratanti."  // Assinatura do e-mail
+                        "Se você não reconhece esta atualização, entre em contato conosco imediatamente.\n\n" +
+                        "Atenciosamente,\nEquipe Contratanti."
         );
-        return emp;
+
+        return empresaAtualizada;
     }
+
+
     public Optional<Empresa> empresaFindById(BigInteger eid) {
         return repository.findById(eid);
     }
@@ -230,6 +249,11 @@ public class EmpresaServices {
      * Valida um número de telefone.
      */
     public static boolean validarTelefone(String telefone) {
+        //verifica se o telefone é nulo ou vazio
+        if (telefone == null || telefone.isEmpty()) {
+            return true; // Se telefone for opcional, considere válido
+        }
+
         telefone = telefone.replaceAll("\\D", "");
 
         if (!(telefone.length() >= 10 && telefone.length() <= 11)) {

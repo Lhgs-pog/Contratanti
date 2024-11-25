@@ -45,7 +45,7 @@ public class CopentenciasController {
     }
 
     @GetMapping("/nome/{nome}")
-    public ResponseEntity<List<Competencias>> findByNome(@PathVariable String nome){
+    public ResponseEntity<List<Competencias>> findByNome(@PathVariable("nome") String nome){
         List<Competencias> competencias = services.findByNome(nome);
         if (competencias.isEmpty())
             return ResponseEntity.noContent().build();
@@ -70,7 +70,7 @@ public class CopentenciasController {
     }
 
     @DeleteMapping("/{cid}")
-    public ResponseEntity<Void> deleteById(BigInteger id){
+    public ResponseEntity<Void> deleteById(@PathVariable("cid") BigInteger id){
         services.deleteCompetenciasById(id);
         return ResponseEntity.noContent().build();
     }
