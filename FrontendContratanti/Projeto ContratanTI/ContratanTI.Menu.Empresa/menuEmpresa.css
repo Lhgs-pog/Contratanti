@@ -56,8 +56,9 @@ body {
 }
 
 .home a:hover {
-  color: #75efff !important;
+  color: #1ccaff !important;
 }
+
 /*logotipo do site*/
 .logotipoImg {
   height: 150px;
@@ -186,30 +187,6 @@ body {
   font-weight: 500;
 }
 
-/*
-.navigation-buttons {
-  margin-top: 20px;
-  text-align: center;
-}
-
- configurar depois os botôes para exibir outros currículos
-.navigation-buttons button {
-  margin: 0 10px;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  border: none;
-  background-color: #11cbd8;
-  color: #ffffff;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-}
-
-.navigation-buttons button:hover {
-  background-color: #0a7e8c;
-}
-*/
-
 h5 {
   margin: 0;
   padding: 0;
@@ -266,15 +243,15 @@ footer {
   padding: 0;
   margin: 0;
   display: flex;
-  justify-content: center; /* Centraliza os links horizontalmente */
-  align-items: center; /* Alinha verticalmente */
-  gap: 15px; /* Espaçamento entre os links */
-  margin-top: -10px; /* Move os links para cima */
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-top: -10px;
 }
 
 /* Itens da lista */
 .footer-links li {
-  display: inline; /* Garante que fiquem em linha */
+  display: inline;
 }
 
 /* Estilo dos links */
@@ -293,7 +270,7 @@ footer {
 
 /* Divisores entre os links */
 .footer-links .divider {
-  color: #ccc; /* Cor cinza para os divisores */
+  color: #ccc;
   font-size: 14px;
 }
 

@@ -114,7 +114,8 @@ ul li.item-menu a .icon > i {
   padding: 60px;
   width: 900px;
   height: 770px;
-  margin: 20px;
+  margin-left: 80px;
+  margin-top: 20px;
   backdrop-filter: blur(10px);
   overflow: hidden;
 }
@@ -133,14 +134,13 @@ ul li.item-menu a .icon > i {
 .perfil-dados {
   margin-top: -50px;
   font-size: 17px;
-  border: 1px solid #ccc; /* Borda geral do container */
+  border: 1px solid #ccc;
   border-radius: 10px;
   padding: 20px;
   background-color: #ffffff;
   box-shadow: 0 4px 10px rgba(0, 50, 83, 0.1);
 }
 
-/* Adicionei uma classe para garantir que as bordas e o layout dos novos campos sigam o estilo */
 .dado {
   display: flex;
   justify-content: space-between;
@@ -151,7 +151,7 @@ ul li.item-menu a .icon > i {
 }
 
 .dado:last-child {
-  border-bottom: none; /* Remove a borda do último item */
+  border-bottom: none;
 }
 
 label {
@@ -181,10 +181,9 @@ button.btn-editar {
   margin-top: 20px;
   width: 100%;
   transition: background-color 0.3s ease;
-  transition: background 0.3s ease, transform 0.2s ease;
 }
 
-button.btn-editar:hover:hover {
+button.btn-editar:hover {
   background-color: #017888;
   transform: scale(0.98);
 }

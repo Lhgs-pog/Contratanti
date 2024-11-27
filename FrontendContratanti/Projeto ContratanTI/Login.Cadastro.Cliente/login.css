@@ -1,5 +1,8 @@
+/* Importando fontes do Google Fonts */
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 
+/* Configuração padrão para resetar margens, espaçamentos e aplicar fonte */
 * {
   margin: 0;
   padding: 0;
@@ -7,56 +10,65 @@
   font-family: "Montserrat", sans-serif;
 }
 
+/* Estilização do corpo da página */
 body {
-  background-color: #f0f8ff;
+  background-color: #f0f8ff; /* Azul claro */
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  height: 100vh;
+  height: 100vh; /* Altura total da tela */
 }
+
+/* Contêiner principal */
 .container {
-  background-color: #fff;
-  border-radius: 30px;
+  background-color: #fff; /* Branco */
+  border-radius: 30px; /* Bordas arredondadas */
   position: relative;
   overflow: hidden;
-  width: 768px;
-  max-width: 100%;
-  min-height: 480px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-
-  animation: shadowAnimation 3s infinite;
+  width: 788px; /* Largura fixa */
+  max-width: 100%; /* Responsivo */
+  min-height: 490px; /* Altura mínima */
+  border: 1px solid rgba(0, 0, 0, 0.1); /* Borda sutil */
+  animation: shadowAnimation 3s infinite; /* Animação de sombra */
 }
 
+/* Animação da sombra do contêiner */
 @keyframes shadowAnimation {
   0% {
-    box-shadow: 0px 0px 10px rgb(40, 248, 161);
+    box-shadow: 0px 0px 10px rgb(40, 248, 161); /* Verde */
   }
   33% {
-    box-shadow: 0px 0px 20px rgb(24, 228, 255);
+    box-shadow: 0px 0px 20px rgb(24, 228, 255); /* Azul claro */
   }
   66% {
-    box-shadow: 0px 0px 20px rgb(50, 115, 255);
+    box-shadow: 0px 0px 20px rgb(50, 115, 255); /* Azul forte */
   }
   100% {
-    box-shadow: 0px 0px 10px rgb(40, 248, 161);
+    box-shadow: 0px 0px 10px rgb(40, 248, 161); /* Verde */
   }
 }
 
+/* Título para criar conta */
 #criar-conta {
-  font-size: 27px;
-  padding: 20px;
+  font-size: 25px;
+  padding: 25px;
   font-weight: bold;
-  letter-spacing: 2px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
 }
 
+/* Título para login */
 #login-conta {
   font-size: 33px;
   padding: 20px;
   font-weight: bold;
   letter-spacing: 3px;
+  font-family: "Montserrat", serif;
+  text-transform: uppercase;
 }
 
+/* Parágrafos dentro do contêiner */
 .container p {
   font-size: 14px;
   line-height: 20px;
@@ -64,10 +76,12 @@ body {
   margin: 20px 0;
 }
 
+/* Texto pequeno */
 .container span {
   font-size: 12px;
 }
 
+/* Links dentro do contêiner */
 .container a {
   color: #333;
   font-size: 13px;
@@ -75,12 +89,14 @@ body {
   margin: 20px 0 10px;
 }
 
+/* Link para recuperação de senha */
 #senha {
   text-decoration: underline;
 }
 
+/* Botões no contêiner */
 .container button {
-  background-color: #037483;
+  background-color: #037483; /* Azul esverdeado */
   color: #fff;
   font-size: 12px;
   padding: 10px 45px;
@@ -95,15 +111,19 @@ body {
     box-shadow 0.3s ease;
 }
 
+/* Hover no botão */
 .container button:hover {
-  background-color: #05aab3;
+  background-color: #05aab3; /* Azul mais claro */
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
+
+/* Botão com estilo transparente */
 .container button.hidden {
   background-color: transparent;
   border-color: #fff;
 }
 
+/* Formulário dentro do contêiner */
 .container form {
   background-color: #fff;
   display: flex;
@@ -114,8 +134,9 @@ body {
   height: 100%;
 }
 
+/* Campos de entrada no formulário */
 .container input {
-  background-color: #eee;
+  background-color: #eee; /* Cinza claro */
   border: none;
   margin: 10px 0;
   padding: 10px 15px;
@@ -125,6 +146,7 @@ body {
   outline: none;
 }
 
+/* Contêiner dos formulários de login e cadastro */
 .form-container {
   position: absolute;
   top: 0;
@@ -132,23 +154,29 @@ body {
   transition: all 0.6s ease-in-out;
 }
 
+/* Formulário de login */
 .sign-in {
   left: 0;
   width: 50%;
   z-index: 2;
+  top: -10px;
 }
 
+/* Formulário de login quando contêiner está ativo */
 .container.active .sign-in {
   transform: translateX(100%);
 }
 
+/* Formulário de cadastro */
 .sign-up {
   left: 0;
   width: 50%;
   opacity: 0;
   z-index: 1;
+  top: -10px;
 }
 
+/* Formulário de cadastro quando contêiner está ativo */
 .container.active .sign-up {
   transform: translateX(100%);
   opacity: 1;
@@ -156,6 +184,7 @@ body {
   animation: move 0.6s;
 }
 
+/* Animação de entrada */
 @keyframes move {
   0%,
   49.99% {
@@ -169,6 +198,7 @@ body {
   }
 }
 
+/* Contêiner do painel alternador */
 .alternar-container {
   position: absolute;
   top: 0;
@@ -181,27 +211,30 @@ body {
   z-index: 1000;
 }
 
+/* Painel alternador quando contêiner está ativo */
 .container.active .alternar-container {
   transform: translateX(-100%);
   border-radius: 0 150px 100px 0;
 }
 
+/* Painel alternador */
 .alternar {
   height: 100%;
   background: #037483;
   color: #fff;
   position: relative;
   left: -100%;
-  height: 100%;
   width: 200%;
   transform: translateX(0);
   transition: all 0.6s ease-in-out;
 }
 
+/* Painel alternador quando contêiner está ativo */
 .container.active .alternar {
   transform: translateX(50%);
 }
 
+/* Painéis de alternância (esquerdo e direito) */
 .alternar-painel {
   position: absolute;
   width: 50%;
@@ -213,23 +246,26 @@ body {
   padding: 0 30px;
   text-align: center;
   top: 0;
-  transform: translateX(0);
   transition: all 0.6s ease-in-out;
 }
 
+/* Painel esquerdo antes de ser ativado */
 .alternar-esquerda {
   transform: translateX(-200%);
 }
 
+/* Painel esquerdo quando ativo */
 .container.active .alternar-esquerda {
   transform: translateX(0);
 }
 
+/* Painel direito antes de ser ativado */
 .alternar-direita {
   right: 0;
   transform: translateX(0);
 }
 
+/* Painel direito quando ativo */
 .container.active .alternar-direita {
   transform: translateX(200%);
 }

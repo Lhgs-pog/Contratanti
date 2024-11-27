@@ -25,20 +25,20 @@
             />
           </div>
           <div class="input-group">
-            <label for="email">Email</label>
+            <label for="github">GitHub</label>
             <input
-              type="email"
-              id="email"
-              placeholder="Digite seu email"
+              type="url"
+              id="github"
+              placeholder="https://github.com/seu-perfil"
               required
             />
           </div>
           <div class="input-group">
-            <label for="telefone">Telefone</label>
+            <label for="cargo">Cargo de Atuação</label>
             <input
-              type="tel"
-              id="telefone"
-              placeholder="(xx) xxxxx-xxxx"
+              type="text"
+              id="cargo"
+              placeholder="Cargo em que atua"
               required
             />
           </div>
@@ -50,18 +50,47 @@
               placeholder="https://www.linkedin.com/in/seu-perfil"
               required
             />
-            </div>
-            <div class="input-group">
-              <label for="descricao">Breve Descrição da Área de Atuação</label>
-              <textarea
-                id="descricao"
-                name="descricao"
-                placeholder="Descreva brevemente a área em que atua"
-                rows="4"
-                required
-              ></textarea>
-            </div>
           </div>
+          <div class="input-group">
+            <label for="descricao"
+              >Descreva brevemente as suas competências:</label
+            >
+            <textarea
+              id="descricao"
+              name="descricao"
+              placeholder="Breve descrição das suas experiências e competências"
+              rows="4"
+              required
+            ></textarea>
+           
+            <div class="input-group" id="cidade-group">
+              <label for="cidades">Selecione sua cidade em Brasília</label>
+              <select id="cidades" required>
+                <option value="" disabled selected>Escolha uma cidade</option>
+                <option value = "Àguas Claras">Àguas Claras</option>
+                <option value = "Asa Norte">Asa Norte</option>
+                <option value = "Asa Sul">Asa Sul</option>
+                <option value = "Bandeirante">Bandeirante</option>
+                <option value = "Brazlândia">Brazlândia</option>
+                <option value = "Candogolândia">Candogolândia</option>
+                <option value = "Ceilândia">Ceilândia</option>
+                <option value = "Gama">Gama</option>
+                <option value = "Guará">Guará</option>
+                <option value = "Lago Norte">Lago Norte</option>
+                <option value = "Lago Sul">Lago Sul</option>
+                <option value = "Núcleo Bandeirante">Núcleo Bandeirante</option>
+                <option value = "Paranoá">Paranoá</option>
+                <option value = "Planaltina">Planaltina</option>
+                <option value = "Recanto das Emas">Recanto das Emas</option>
+                <option value = "Riacho Fundo 1">Riacho Fundo 1</option>
+                <option value = "Riacho Fundo 2">Riacho Fundo 2</option>
+                <option value = "São Sebastião">São Sebastião</option>
+                <option value = "Samanbaia">Samanbaia</option>
+                <option value = "Santa Maria">Santa Maria</option>
+                <option value = "Taguatinga">Taguatinga</option>
+              </select>
+            </div>
+            
           <div class="input-group">
             <label for="file-upload" class="custom-file-upload">
               Envie seu Currículo (PDF, PNG, DOC...)
@@ -79,6 +108,7 @@
         </form>
       </div>
     </div>
+
     <script src="cadCurriculos.js"></script>
   </body>
 </html>

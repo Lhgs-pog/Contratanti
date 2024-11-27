@@ -5,6 +5,7 @@ import com.projeto.BackendContratanti.Dto.CompetenciasRequestDTO;
 import com.projeto.BackendContratanti.Dto.CompetenciasResponseDTO;
 import com.projeto.BackendContratanti.Model.Competencias;
 import com.projeto.BackendContratanti.Reposotory.CompetenciasRepository;
+import com.projeto.BackendContratanti.Security.ResourceNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,9 +56,14 @@ public class CompetenciasServices {
     }
 
     @Transactional
-    public Competencias updateCompetencias(Competencias comp){
-        Competencias updated = repository.save(comp);
-        return updated;
+    public Competencias updateCompetencias(BigInteger cid, Competencias compatt){
+        Competencias comp = repository.findById(cid)
+                .orElseThrow(() -> new ResourceNotFoundException("Competencia não encontrada"));
+
+        comp.setNome(compatt.getNome());
+        comp.setEmail(compatt.getEmail());
+
+        return repository.save(comp);
     }
 
     @Transactional

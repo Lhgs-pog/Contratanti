@@ -1,42 +1,63 @@
-/* Caso queira mexer e implementar o carrossel
+document.addEventListener('DOMContentLoaded', () => {
+    const curriculoList = document.getElementById('curriculo-list'); // Div onde os currículos serão adicionados
+    const apiUrl = `http://localhost:8080/usuario`; // URL base para os currículos
 
-let currentSlide = 0; // Inicia sempre no primeiro slide (índice 0)
+    // Função para buscar os dados da API
+    const fetchCurriculos = async () => {
+        try {
+            // Requisição GET para o endpoint
+            const response = await fetch(apiUrl, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
 
-function showSlide(index) {
-  const slides = document.querySelectorAll(".carousel-item");
-  const indicators = document.querySelectorAll(".carousel-indicators button");
+            if (!response.ok) {
+                throw new Error(`Erro ao buscar currículos: ${response.status}`);
+            }
 
-  // Esconde todos os slides
-  slides.forEach((slide) => {
-    slide.classList.remove("active");
-  });
+            const usuarios = await response.json(); // Supondo que a resposta seja um array de objetos de usuários
 
-  // Remove o estado ativo dos indicadores
-  indicators.forEach((indicator) => {
-    indicator.classList.remove("active");
-  });
+            // Verifica se a resposta contém currículos
+            if (!usuarios || usuarios.length === 0) {
+                curriculoList.innerHTML = '<p>Nenhum currículo encontrado.</p>';
+                return;
+            }
 
-  // Exibe o slide correspondente e define o indicador ativo
-  slides[index].classList.add("active");
-  indicators[index].classList.add("active");
+            // Adiciona os currículos na página
+            usuarios.forEach(usuario => {
+                const { nome, email, telefone, descricao, cidade } = usuario;
 
-  // Atualiza o slide atual
-  currentSlide = index;
-}
+                // Verifica se os dados do usuário existem
+                if (!nome || !email || !telefone || !descricao || !cidade) {
+                    console.warn('Dados do currículo incompletos', usuario);
+                    return; // Ignora currículos incompletos
+                }
 
-// Funções para navegação com os controles
-function nextSlide() {
-  const slides = document.querySelectorAll(".carousel-item");
-  currentSlide = (currentSlide + 1) % slides.length; // Vai para o próximo slide
-  showSlide(currentSlide);
-}
+                // Cria o elemento para cada currículo
+                const curriculoItem = document.createElement('div');
+                curriculoItem.classList.add('curriculo');
 
-function prevSlide() {
-  const slides = document.querySelectorAll(".carousel-item");
-  currentSlide = (currentSlide - 1 + slides.length) % slides.length; // Volta para o slide anterior
-  showSlide(currentSlide);
-}
+                // Adiciona os dados do usuário no HTML
+                curriculoItem.innerHTML = `
+                    <h4>${nome}</h4>
+                    <p>Email: ${email}</p>
+                    <p>Telefone: ${telefone}</p>
+                    <p>Descrição: ${descricao}</p>
+                    <p>Cidade: ${cidade}</p>
+                `;
 
-// Inicializa o carrossel no primeiro slide
-showSlide(0); // Garantindo que o primeiro slide (índice 0) esteja ativo ao carregar a página
-*/
+                // Adiciona o currículo à lista
+                curriculoList.appendChild(curriculoItem);
+            });
+        } catch (error) {
+            console.error('Erro ao carregar currículos:', error);
+            curriculoList.innerHTML = '<p>Ocorreu um erro ao carregar os currículos.</p>';
+        }
+    };
+
+    // Carrega os currículos assim que o DOM for completamente carregado
+    fetchCurriculos();
+});
+s

@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -28,6 +29,9 @@ public class SecurityConfiguration {
     @Autowired
     private SecurityFilter securityFilter; // Injeção do filtro personalizado de segurança
 
+    @Autowired
+    private CustomAuthenticationManager customAuthenticationManager; // Injetado o CustomAuthenticationManager
+
     // Configuração de segurança HTTP
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -35,9 +39,9 @@ public class SecurityConfiguration {
                 .csrf(csfr -> csfr.disable()) // Desabilita CSRF para APIs sem estado
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of("http://localhost:8080")); // Domínio correto para o frontend
-                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+                    config.setAllowedOrigins(List.of("http://localhost:8080", "*")); // Domínio correto para o frontend
                     config.setAllowedHeaders(List.of("*"));
+                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
                     return config;
                 }))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Política sem estado
@@ -77,12 +81,11 @@ public class SecurityConfiguration {
                 .build();
     }
 
-    // Bean do AuthenticationManager, necessário para autenticação
+    // Bean do AuthenticationManager
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager(); // Retorna o AuthenticationManager configurado
     }
-
 
     // Bean que cria o PasswordEncoder para codificar senhas com BCrypt
     @Bean

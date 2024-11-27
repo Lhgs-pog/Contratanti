@@ -1,28 +1,40 @@
 <!DOCTYPE html>
 <html lang="pt-br">
   <head>
+    <!-- Metadados -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Estilos Externos -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
     />
     <link rel="stylesheet" href="login.css" />
+
+    <!-- Título da Página -->
     <title>Login Usuário</title>
   </head>
 
   <body>
     <div class="container" id="container">
+      <!-- Formulário de Cadastro -->
       <div class="form-container sign-up">
         <form>
           <h1 id="criar-conta">Criar uma Conta</h1>
-          <span> Use seu email para se registrar</span>
+          <span>Use seu email para se registrar</span>
           <input type="text" placeholder="Nome" required autocomplete="name" />
           <input
             type="email"
             placeholder="Email"
             required
             autocomplete="email"
+          />
+          <input
+            type="tel"
+            placeholder="Telefone"
+            required
+            autocomplete="tel"
           />
           <input
             type="password"
@@ -33,10 +45,12 @@
           <button type="submit">Inscreva-se</button>
         </form>
       </div>
+
+      <!-- Formulário de Login -->
       <div class="form-container sign-in">
         <form>
           <h1 id="login-conta">Login</h1>
-          <span> Use seu email e senha para entrar</span>
+          <span>Use seu email e senha para entrar</span>
           <input
             type="email"
             placeholder="Email"
@@ -53,8 +67,11 @@
           <button type="submit">Entrar</button>
         </form>
       </div>
+
+      <!-- Painéis de Alternância -->
       <div class="alternar-container">
         <div class="alternar">
+          <!-- Painel Esquerdo -->
           <div class="alternar-painel alternar-esquerda">
             <h1>Bem-Vindo ao ContratanTI!</h1>
             <p>
@@ -63,6 +80,8 @@
             </p>
             <button class="hidden" id="login">Entrar</button>
           </div>
+
+          <!-- Painel Direito -->
           <div class="alternar-painel alternar-direita">
             <h1>Bem-Vindo ao ContratanTI!</h1>
             <p>
@@ -75,6 +94,7 @@
       </div>
     </div>
 
+    <!-- Script JavaScript -->
     <script src="login.js"></script>
   </body>
 </html>

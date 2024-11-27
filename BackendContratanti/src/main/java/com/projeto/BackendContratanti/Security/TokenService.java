@@ -7,6 +7,8 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.projeto.BackendContratanti.Model.Empresa;
 import com.projeto.BackendContratanti.Model.Usuario;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -27,17 +29,20 @@ public class TokenService {
      * @param usuario Objeto do tipo Usuario.
      * @return Token JWT gerado.
      */
+    private static final Logger logger = LoggerFactory.getLogger(TokenService.class);
+
     public String generateToken(Usuario usuario) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256(secret); // Algoritmo de assinatura HMAC com o segredo
+            Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.create()
-                    .withIssuer("auth-api") // Define o emissor
-                    .withSubject(usuario.getEmail()) // Assunto do token: email do usuário
-                    .withClaim("tipo", "USUARIO") // Adiciona a claim tipo como "USUARIO"
-                    .withExpiresAt(genExpirationDate()) // Define a data de expiração
-                    .sign(algorithm); // Assina o token
+                    .withIssuer("auth-api")
+                    .withSubject(usuario.getEmail())
+                    .withClaim("tipo", "USUARIO")
+                    .withExpiresAt(genExpirationDate())
+                    .sign(algorithm);
         } catch (JWTCreationException exception) {
-            throw new RuntimeException("Erro ao gerar token: ", exception); // Trata erros de criação
+            logger.error("Erro ao gerar token: ", exception);
+            throw new RuntimeException("Erro ao gerar token: ", exception);
         }
     }
 

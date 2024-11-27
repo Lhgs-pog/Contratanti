@@ -6,6 +6,7 @@ import com.projeto.BackendContratanti.Dto.LoginResponseDTO;
 import com.projeto.BackendContratanti.Model.Empresa;
 import com.projeto.BackendContratanti.Model.Usuario;
 import com.projeto.BackendContratanti.Reposotory.UsuarioRepository;
+import com.projeto.BackendContratanti.Security.CustomAuthenticationManager;
 import com.projeto.BackendContratanti.Security.TokenService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -47,12 +48,16 @@ public class AuthenticationController {
             // Tenta autenticar as credenciais fornecidas
             var auth = this.authenticationManager.authenticate(usernamePassword);
 
-            // Após autenticação, gera o token JWT
-            var token = tokenService.generateToken((Usuario) auth.getPrincipal());
-
-            // Retorna a resposta com o token gerado
-            return ResponseEntity.ok(new LoginResponseDTO(token));
-
+            // Verifica se o principal é do tipo esperado (Usuario)
+            if (auth.getPrincipal() instanceof Usuario usuario) {
+                // Após autenticação, gera o token JWT
+                var token = tokenService.generateToken(usuario);
+                // Retorna a resposta com o token gerado
+                return ResponseEntity.ok(new LoginResponseDTO(token));
+            } else {
+                // Caso o principal não seja um Usuario, retorna erro de autenticação
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Erro na autenticação.");
+            }
         } catch (BadCredentialsException e) {
             // Loga o erro de credenciais inválidas
             logger.error("Credenciais inválidas para o usuário: " + data.email(), e);
@@ -63,6 +68,7 @@ public class AuthenticationController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao processar a autenticação.");
         }
     }
+
 
     // Método para autenticação de empresas no endpoint /auth/empresa/login
     @PostMapping("/empresa/login")

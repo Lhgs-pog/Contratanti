@@ -1,45 +1,58 @@
-// Seleciona os itens clicados
-var menuItem = document.querySelectorAll(".item-menu");
+document.addEventListener('DOMContentLoaded', () => {
+    // Função para extrair parâmetros da URL
+    const getQueryParam = (param) => {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    };
 
-function selectLink() {
-  menuItem.forEach((item) => item.classList.remove("ativo"));
-  this.classList.add("ativo");
-}
+    // Função de redirecionamento para editar dados
+    function editarDados() {
+        window.location.assign("../EditarPerfilUsuario/EditarUsuario.html");
+    }
 
-menuItem.forEach((item) => item.addEventListener("click", selectLink));
+    // Adiciona o evento de clique ao botão
+    const btnEditar = document.querySelector('.btn-editar');
+    btnEditar.addEventListener('click', editarDados);
 
-// Expandir o menu
-var btnExp = document.querySelector("#btn-exp");
-var menuSide = document.querySelector(".menu-lateral");
+    // Captura o UID da URL
+    const userId = getQueryParam('uid');
+    
+    // Verifica se há um ID de usuário
+    if (!userId) {
+        alert('Nenhum usuário selecionado.');
+        return; // Não faz nada, mas exibe o alerta
+    }
 
-btnExp.addEventListener("click", function () {
-  menuSide.classList.toggle("expandir");
+    const apiUrl = `http://localhost:8080/usuario/${userId}`;
+
+    // Função para buscar os dados do usuário e atualizar as labels
+    const carregarDadosUsuario = async () => {
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Erro ao buscar dados do usuário: ${response.status}`);
+            }
+
+            const userData = await response.json();
+
+            // Atualiza os elementos da página com os dados recebidos
+            document.getElementById('nome').textContent = userData.nome || 'N/A';
+            document.getElementById('email').textContent = userData.email || 'N/A';
+            document.getElementById('senha').textContent = userData.senha ? '********' : 'N/A';
+            document.getElementById('curriculo').textContent = userData.curriculo || 'N/A';
+            document.getElementById('telefone').textContent = userData.telefone || 'N/A';
+            document.getElementById('cpf').textContent = userData.cpf || 'N/A';
+        } catch (error) {
+            console.error('Erro ao carregar os dados do usuário:', error);
+        }
+    };
+
+    // Chama a função para carregar os dados assim que o DOM estiver carregado
+    carregarDadosUsuario();
 });
-
-// Função para editar os dados (redireciona para uma página de edição)
-function editarDados() {
-  const novoNome = prompt("Digite seu novo nome:");
-  const novoEmail = prompt("Digite seu novo email:");
-  const novaSenha = prompt("Digite sua nova senha:");
-
-  if (novoNome && novoEmail && novaSenha) {
-    document.getElementById("nome").innerText = novoNome; // Certifique-se de que o HTML tenha o ID correto
-    document.getElementById("email").innerText = novoEmail;
-    document.getElementById("senha").innerText = novaSenha.replace(/./g, "*");
-    alert("Dados atualizados com sucesso!");
-  } else {
-    alert("Por favor, preencha todos os campos.");
-  }
-}
-
-// Função para editar o currículo
-function editarCurriculo() {
-  document.getElementById("file-upload").click(); // Clica no input para abrir o seletor de arquivos
-  document
-    .getElementById("file-upload")
-    .addEventListener("change", function () {
-      const fileName = this.files[0].name;
-      document.getElementById("curriculo").innerText = fileName; // Atualiza o nome do currículo exibido
-      alert("Currículo atualizado com sucesso!");
-    });
-}

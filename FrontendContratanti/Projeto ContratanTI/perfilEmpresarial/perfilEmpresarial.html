@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Perfil do Usuário</title>
-    <link rel="stylesheet" href="perfilUsuario.css" />
+    <title>Perfil Empresarial</title>
+    <link rel="stylesheet" href="perfilEmpresarial.css" />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
@@ -15,33 +15,40 @@
     />
   </head>
   <body>
+    <!-- Barra Lateral -->
     <nav class="menu-lateral">
+      <!-- Botão de Expandir Barra Lateral -->
       <div class="btn-expandir" id="btn-exp">
-        <!-- Adicionado ID para fácil seleção no JavaScript -->
+        <!-- Ícone da barra lateral (menu) -->
         <i class="bi bi-list"></i>
       </div>
 
       <ul>
+        <!-- Itens do Menu -->
         <li class="item-menu">
           <a href="home.html" rel="noopener noreferrer">
+            <!-- Ícone da Home -->
             <span class="icon"><i class="bi bi-house"></i></span>
             <span class="txt-link">Home</span>
           </a>
         </li>
         <li class="item-menu">
           <a href="#">
-            <span class="icon"><i class="bi bi-envelope-paper"></i></span>
-            <span class="txt-link">Currículo</span>
+            <!-- Ícone de Suporte -->
+            <span class="icon"><i class="bi bi-chat-left-dots"></i></span>
+            <span class="txt-link">Suporte</span>
           </a>
         </li>
         <li class="item-menu">
           <a href="#">
+            <!-- Ícone do Perfil -->
             <span class="icon"><i class="bi bi-person-circle"></i></span>
             <span class="txt-link">Perfil</span>
           </a>
         </li>
         <li class="item-menu">
           <a href="#">
+            <!-- Ícone de Sair -->
             <span class="icon"><i class="bi bi-box-arrow-in-left"></i></span>
             <span class="txt-link">Sair</span>
           </a>
@@ -49,59 +56,58 @@
       </ul>
     </nav>
 
+    <!-- Container de Cadastro -->
     <div class="perfil-container">
       <div class="perfil-header">
-        <h2>PERFIL DO USUÁRIO</h2>
+        <h2>CADASTRO EMPRESARIAL</h2>
       </div>
+
       <div class="perfil-dados">
         <div class="dado">
-          <label>Nome:</label>
-          <span id="nome"></span>
+          <label>Nome</label>
+          <span id="nome">Empresa XYZ</span>
         </div>
+
         <div class="dado">
-          <label>Email:</label>
-          <span id="email"></span>
+          <label>E-mail</label>
+          <span id="email">empresa@xyz.com</span>
         </div>
+
         <div class="dado">
-          <label>Senha:</label>
-          <span id="senha"></span>
+          <label>Telefone</label>
+          <span id="telefone">+55 11 98765-4321</span>
         </div>
+
         <div class="dado">
-          <label>Currículo:</label>
-          <span id="curriculo"></span>
+          <label>CNPJ</label>
+          <span id="cnpj">12.345.678/0001-99</span>
         </div>
+
         <div class="dado">
-          <label>Telefone:</label>
-          <span id="telefone"></span>
+          <label>Descrição (Opcional)</label>
+          <span id="descricao"
+            >Somos uma empresa especializada em soluções tecnológicas para o
+            mercado empresarial.</span
+          >
         </div>
+
         <div class="dado">
-          <label>CPF (Opcional):</label>
-          <span id="cpf"></span>
+          <label>Link LinkedIn (Opcional)</label>
+          <span id="linkedin"
+            ><a
+              href="https://www.linkedin.com/company/empresa-xyz"
+              target="_blank"
+              >Empresa XYZ no LinkedIn</a
+            ></span
+          >
+        </div>
+
+        <div class="dado">
+          <label>Senha</label>
+          <span id="senha">********</span>
         </div>
       </div>
-
       <button class="btn-editar" onclick="editarDados()">Editar Dados</button>
-
-
-      <div class="divisoria"></div></br>
-
-      <div class="editar-curriculo">
-        <h3>Editar Currículo</h3>
-        <div class="input-group">
-          <label for="file-upload" class="custom-file-upload">
-            Envie seu Currículo (PDF, PNG, DOC...)
-          </label>
-          <input
-            id="file-upload"
-            type="file"
-            accept=".pdf, .png, .doc, .docx, .txt"
-            required
-            style="display: none"
-          />
-        </div>
-      </div>
     </div>
-
-    <script src="perfilUsuario.js"></script>
   </body>
 </html>

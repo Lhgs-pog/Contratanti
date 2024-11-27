@@ -1,35 +1,40 @@
+/* Importando a fonte "Montserrat" do Google Fonts */
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap");
 
+/* Resetando margens, preenchimentos e definindo a fonte global */
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  box-sizing: border-box; /* Garantir que padding e border não afetem a largura e altura */
   font-family: "Montserrat", sans-serif;
 }
 
+/* Estilizando o corpo da página */
 body {
-  background-color: #f0f8ff;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: flex-start; /* Alinhamento de cima para baixo */
   height: 100vh;
+  background-color: #f4f8f9;
+  padding: 0 10px; /* Ajuste o padding para garantir que o conteúdo tenha mais espaço */
 }
 
+/* Container principal com design flexível */
 .container {
   background-color: #fff;
-  border-radius: 30px;
   box-shadow: 0 5px 15px rgba(235, 6, 6, 0.1);
-  padding: 40px;
-  width: 760px;
+  padding: 31px;
+  width: 795px;
   max-width: 100%;
-  min-height: 480px;
+  min-height: 490px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   display: flex;
-  flex-direction: column; /* Permite alinhar os itens em coluna */
-  align-items: center; /* Centraliza horizontalmente */
+  flex-direction: column;
+  align-items: center;
   animation: shadowAnimation 3s infinite;
 }
 
+/* Animação para alterar as sombras */
 @keyframes shadowAnimation {
   0% {
     box-shadow: 0px 0px 10px rgb(40, 248, 161);
@@ -45,45 +50,79 @@ body {
   }
 }
 
+/* Estilo do título dentro do formulário */
 .form-box h1 {
   text-align: center;
-
-  /* Gradiente de cor para o texto */
-  background: linear-gradient(90deg, #239dad, #239dad);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-
-  /* Estilização adicional */
-  font-size: 36px;
+  background: #16759e;
+  border-radius: 10px;
+  color: #f0f0f0;
+  font-size: 26px;
   font-weight: bold;
-  letter-spacing: 2px;
   text-transform: uppercase;
-
-  /* Efeito de sombra no texto */
-  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  padding: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  max-width: 91%;
+  margin: auto;
 }
 
+/* Estilo do formulário */
 .form-box form {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: wrap; /* Permite que os itens quebrem de linha */
   gap: 20px;
   padding: 35px;
 }
 
+/* Estilo dos campos de entrada do formulário */
 .input-group {
   flex: 1 1 48%;
   display: flex;
   flex-direction: column;
 }
 
-.input-group label {
-  margin-bottom: 8px;
-  font-weight: 500;
+.input-group select {
+  padding: 14px; /* Espaçamento interno */
+  border-radius: 8px; /* Bordas arredondadas */
+  border: 1px solid #037483; /* Cor da borda */
+  box-shadow: 0 0 10px rgba(0, 217, 255, 0.3);
+  background-color: #fff; /* Fundo branco */
+  font-size: 14px; /* Tamanho do texto */
+  color: #333; /* Cor do texto */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra leve */
+  appearance: none; /* Remove a seta padrão */
+  cursor: pointer; /* Cursor muda para mãozinha */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Animação */
 }
 
-.input-group input,
-.input-group textarea {
+#cidade-group {
+  margin-top: 20px;
+}
+
+/* Personalização para seta do dropdown */
+.input-group select {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px 16px;
+}
+
+/* Estilo ao focar no select */
+.input-group select:focus {
+  border-color: rgb(0, 217, 255); /* Borda ao focar */
+  outline: none; /* Remove o contorno padrão */
+  box-shadow: 0 0 10px rgba(0, 217, 255, 0.3); /* Sombra ao focar */
+}
+
+/* Estilo do label dentro de cada input */
+.input-group label {
+  margin-bottom: 8px;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+/* Estilo do campo de input */
+.input-group input {
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #037483;
@@ -91,61 +130,90 @@ body {
   max-width: 100%;
 }
 
+/* Estilo do input ao focar (selecionar) */
+.input-group input:focus {
+  border-color: rgb(0, 217, 255);
+  box-shadow: 0 0 10px rgba(0, 217, 255, 0.3);
+  outline: none;
+}
+
+/* Estilo da área de texto */
 .input-group textarea {
-  padding: 10px;
+  padding: 17px;
   border-radius: 8px;
   border: 1px solid #037483;
   font-size: 14px;
   max-width: 710px;
-  resize: none;
+  resize: none; /* Desabilita o redimensionamento */
   max-height: 80px;
-  overflow: auto;
+  overflow: auto; /* Permite rolagem se necessário */
 }
 
+/* Estilo da área de texto ao focar */
+.input-group textarea:focus {
+  border-color: rgb(0, 217, 255);
+  box-shadow: 0 0 10px rgba(0, 217, 255, 0.3);
+  outline: none;
+}
+
+/* Estilo para agrupar campos que ocupam 100% da largura */
 .group-left {
   flex: 1 1 100%;
 }
 
-.custom-file-upload {
-  display: inline-block;
+/* Estilo do botão de upload personalizado */
+.custom-file-upload,
+.submit-btn {
+  display: block;
   padding: 15px 20px;
-  background-color: #f0f0f0;
-  color: #037483;
   border-radius: 10px;
-  border: 2px dashed #037483;
-  cursor: pointer;
-  text-align: center;
   font-size: 14px;
-  margin-bottom: 10px;
-  margin-top: -10px;
-  width: 619px;
+  text-align: center;
+  width: auto;
+  margin-top: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
-.custom-file-upload:hover {
-  background-color: #d1faff;
+/* Estilo do botão de upload */
+.custom-file-upload {
+  display: inline-block;
+  background-color: #f0f0f0;
+  color: #000000;
+  border-radius: 10px;
+  border: 2px dashed #037483; /* Borda pontilhada */
+  margin-bottom: 10px;
+  font-size: 20px;
 }
+
+/* Estilo ao passar o mouse sobre o botão de upload */
+.custom-file-upload:hover {
+  background-color: #d8efff;
+}
+
+/* Estilo da pré-visualização do arquivo */
 .file-preview {
   margin-top: -5px;
   font-size: 50px;
 }
 
+/* Estilo do botão de envio */
 .submit-btn {
-  background-color: #037483;
+  background-color: #1c6888;
   color: white;
-  padding: 15px 259px;
   border-radius: 9px;
-  font-size: 17px;
-  cursor: pointer;
   flex: 1 5 50%;
-  margin-top: 9px;
-  text-transform: uppercase;
+  text-transform: uppercase; /* Texto em maiúsculas */
   border: none;
-  transition: background-color 0.3s ease, transform 0.3s ease,
-    box-shadow 0.3s ease;
-  margin-top: 20px;
+  margin-top: 26px;
+  margin: center;
+  font-size: 15px;
+  font-weight: bold;
 }
 
+/* Estilo do botão de envio ao passar o mouse sobre ele */
 .submit-btn:hover {
-  background-color: #02939b;
+  background-color: #097aaa;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }

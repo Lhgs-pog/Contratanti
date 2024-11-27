@@ -58,9 +58,9 @@ public class CopentenciasController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping
-    public ResponseEntity<Competencias> updateCompetencia(@Valid @RequestBody Competencias competencias){
-        return ResponseEntity.ok(services.updateCompetencias(competencias));
+    @PutMapping("/{cid}")
+    public ResponseEntity<Competencias> updateCompetencia(@PathVariable("cid") BigInteger cid,@Valid @RequestBody Competencias competencias){
+        return ResponseEntity.ok(services.updateCompetencias(cid, competencias));
     }
 
     @DeleteMapping

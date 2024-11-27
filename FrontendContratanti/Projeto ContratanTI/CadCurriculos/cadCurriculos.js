@@ -16,8 +16,8 @@ document
     e.preventDefault();
 
     const nome = document.getElementById("nome").value;
-    const email = document.getElementById("email").value;
-    const telefone = document.getElementById("telefone").value;
+    const github = document.getElementById("github").value;
+    const cargo = document.getElementById("cargo").value;
     const linkedin = document.getElementById("linkedin").value;
     const fileInput = document.getElementById("file-upload");
     const descricaoInput = document.querySelector('textarea[name="descricao"]');

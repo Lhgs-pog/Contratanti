@@ -1,4 +1,16 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap");
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Formulário de Dados</title>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+  />
+ <script src=”EditarUsuario.js”></script>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap");
 
 * {
   margin: 0;
@@ -238,3 +250,71 @@ button.btn-editar:hover:hover {
   margin: 20px 0;
   height: 1px;
 }
+
+  </style>
+</head>
+<body>
+  <nav class="menu-lateral">
+    <div class="btn-expandir" id="btn-exp">
+      <i class="bi bi-list"></i>
+    </div>
+    <ul>
+      <li class="item-menu">
+        <a href="home.html" rel="noopener noreferrer">
+          <span class="icon"><i class="bi bi-house"></i></span>
+          <span class="txt-link">Home</span>
+        </a>
+      </li>
+      <li class="item-menu">
+        <a href="#">
+          <span class="icon"><i class="bi bi-envelope-paper"></i></span>
+          <span class="txt-link">Currículo</span>
+        </a>
+      </li>
+      <li class="item-menu">
+        <a href="#">
+          <span class="icon"><i class="bi bi-person-circle"></i></span>
+          <span class="txt-link">Perfil</span>
+        </a>
+      </li>
+      <li class="item-menu">
+        <a href="#">
+          <span class="icon"><i class="bi bi-box-arrow-in-left"></i></span>
+          <span class="txt-link">Sair</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="perfil-container">
+    <div class="perfil-header">
+      <h2>Formulário de Dados</h2>
+    </div>
+    <form id="dados-form">
+      <div class="perfil-dados">
+        <div class="dado">
+          <label for="nome">Nome:</label>
+          <input type="text" id="nome" name="nome" placeholder="Digite seu nome" required />
+        </div>
+        <div class="dado">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" placeholder="Digite seu email" required />
+        </div>
+        <div class="dado">
+          <label for="senha">Senha:</label>
+          <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required />
+        </div>
+        <div class="dado">
+          <label for="telefone">Telefone:</label>
+          <input type="tel" id="telefone" name="telefone" placeholder="Digite seu telefone"/>
+        </div>
+        <div class="dado">
+          <label for="cpf">CPF (Opcional):</label>
+          <input type="text" id="cpf" name="cpf" placeholder="Digite seu CPF (opcional)" />
+        </div>
+      </div>
+      <button type="submit" class="btn-editar">Confirmar Dados</button>
+    </form>
+  </div>
+</body>
+</html>
