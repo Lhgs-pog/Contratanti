@@ -1,46 +1,34 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const curriculoList = document.getElementById('curriculo-list'); // Div onde os currículos serão adicionados
-    const apiUrl = `http://localhost:8080/usuario`; // URL base para os currículos
+    // URL do endpoint de usuários
+    const apiUrl = 'http://localhost:8080/usuario';  // Ajuste o URL conforme necessário
 
-    // Função para buscar os dados da API
+    // Função para buscar os dados da API e exibir os currículos
     const fetchCurriculos = async () => {
         try {
-            // Requisição GET para o endpoint
-            const response = await fetch(apiUrl, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
+            const response = await fetch(apiUrl);
             if (!response.ok) {
                 throw new Error(`Erro ao buscar currículos: ${response.status}`);
             }
 
-            const usuarios = await response.json(); // Supondo que a resposta seja um array de objetos de usuários
+            const usuarios = await response.json(); // Resposta do backend, assumindo um array de usuários
 
-            // Verifica se a resposta contém currículos
+            // Se não houver usuários, exibe mensagem
             if (!usuarios || usuarios.length === 0) {
-                curriculoList.innerHTML = '<p>Nenhum currículo encontrado.</p>';
+                const container = document.querySelector('.grade-curriculos');
+                container.innerHTML = '<p>Nenhum currículo encontrado.</p>';
                 return;
             }
 
-            // Adiciona os currículos na página
+            // Preenche os currículos na página
             usuarios.forEach(usuario => {
-                const { nome, email, telefone, descricao, cidade } = usuario;
+                const { id, nome, email, telefone, descricao, cidade } = usuario;
 
-                // Verifica se os dados do usuário existem
-                if (!nome || !email || !telefone || !descricao || !cidade) {
-                    console.warn('Dados do currículo incompletos', usuario);
-                    return; // Ignora currículos incompletos
-                }
+                // Cria o HTML para exibir cada currículo
+                const curriculoLink = document.createElement('a');
+                curriculoLink.classList.add('curriculo');
+                curriculoLink.href = `../perfilUsuario/perfilUsuario.html?id=${id}`; // Passando o ID do usuário na URL
 
-                // Cria o elemento para cada currículo
-                const curriculoItem = document.createElement('div');
-                curriculoItem.classList.add('curriculo');
-
-                // Adiciona os dados do usuário no HTML
-                curriculoItem.innerHTML = `
+                curriculoLink.innerHTML = `
                     <h4>${nome}</h4>
                     <p>Email: ${email}</p>
                     <p>Telefone: ${telefone}</p>
@@ -48,16 +36,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p>Cidade: ${cidade}</p>
                 `;
 
-                // Adiciona o currículo à lista
-                curriculoList.appendChild(curriculoItem);
+                // Adiciona o currículo à grade
+                const curriculoPage = document.getElementById('curriculoPage1');
+                curriculoPage.appendChild(curriculoLink);
             });
         } catch (error) {
             console.error('Erro ao carregar currículos:', error);
-            curriculoList.innerHTML = '<p>Ocorreu um erro ao carregar os currículos.</p>';
+            const container = document.querySelector('.grade-curriculos');
+            container.innerHTML = '<p>Ocorreu um erro ao carregar os currículos.</p>';
         }
     };
 
-    // Carrega os currículos assim que o DOM for completamente carregado
+    // Chama a função para carregar os currículos ao carregar a página
     fetchCurriculos();
 });
-s

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ContratanTI - Currículo</title>
+    <link rel="stylesheet" href="apresentacaoCurriculo.css" />
+  </head>
+  <body>
+    <!-- Barra de navegação -->
+    <nav>
+      <ul>
+        <div class="home">
+          <img src="img/Logotipo (11).png" id="logo-tipo" alt="Logo" />
+          <a href="#home"><h5>SOBRE NÓS</h5></a>
+          <a href="#about"><h5>PERFIL</h5></a>
+          <a href="#services"><h5>CURRÍCULO</h5></a>
+          <a href="#contact"><h5>INÍCIO</h5></a>
+        </div>
+      </ul>
+    </nav>
+
+    <!-- Tela de Apresentação do Currículo -->
+    <div class="curriculo-container">
+      <header class="curriculo-header">
+        <h1>Nome do Usuário</h1>
+        <p>Cargo | Localização</p>
+      </header>
+
+      <!-- Detalhes do Currículo -->
+<section class="curriculo-detalhes">
+  <!-- Sobre -->
+  <h2>Sobre</h2>
+  <p>
+    <strong>Nome:</strong> Nome do Usuário<br />
+    <strong>Cargo:</strong> Desenvolvedor Full Stack<br />
+    <strong>Cidade:</strong> Santa Maria DF
+  </p>
+</section>
+
+        <!-- Habilidades -->
+        <h2>Habilidades</h2>
+        <textarea
+          rows="5"
+          readonly
+          style="
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: #f8f8f8;
+            resize: vertical;
+          "
+        >
+Aqui estarão listadas as habilidades do usuário, como Linguagens de Programação, Frameworks ou outras competências.
+        </textarea>
+
+        <!-- Upload de Currículo (PDF) -->
+        <h2>Upload de Currículo (PDF)</h2>
+        <p>
+          O candidato pode incluir seu currículo em formato PDF para facilitar o
+          processo de avaliação.
+        </p>
+        <input type="file" accept=".pdf" disabled />
+
+        <!-- Contatos -->
+        <h2>Contatos</h2>
+        <div class="redes-sociais">
+          <p>O candidato pode adicionar links para suas redes sociais:</p>
+          <a href="#" target="_blank">LinkedIn</a>
+          <a href="#" target="_blank">GitHub</a>
+          <a href="mailto:usuario@email.com">E-mail</a>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <p>&copy; 2024 ContratanTI - Todos os direitos reservados.</p>
+    </footer>
+  </body>
+</html>

@@ -7,20 +7,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Função de redirecionamento para editar dados
     function editarDados() {
-        window.location.assign("../EditarPerfilUsuario/EditarUsuario.html");
+        window.location.assign(`../EditarPerfilUsuario/EditarUsuario.html?id=${userId}`);
     }
 
-    // Adiciona o evento de clique ao botão
-    const btnEditar = document.querySelector('.btn-editar');
-    btnEditar.addEventListener('click', editarDados);
-
     // Captura o UID da URL
-    const userId = getQueryParam('uid');
-    
+    const userId = getQueryParam('id');
+
     // Verifica se há um ID de usuário
     if (!userId) {
-        alert('Nenhum usuário selecionado.');
+        //alert('Nenhum usuário selecionado.');
         return; // Não faz nada, mas exibe o alerta
+    }
+
+    // Adiciona o evento de clique ao botão de editar, caso o botão exista
+    const btnEditar = document.querySelector('.btn-editar');
+    if (btnEditar) {
+        btnEditar.addEventListener('click', editarDados);
+    } else {
+        console.warn('Botão de edição não encontrado.');
     }
 
     const apiUrl = `http://localhost:8080/usuario/${userId}`;

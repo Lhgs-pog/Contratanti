@@ -39,7 +39,7 @@ public class SecurityConfiguration {
                 .csrf(csfr -> csfr.disable()) // Desabilita CSRF para APIs sem estado
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of("http://localhost:8080", "*")); // Domínio correto para o frontend
+                    config.setAllowedOrigins(List.of("*")); // Domínio correto para o frontend
                     config.setAllowedHeaders(List.of("*"));
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
                     return config;
