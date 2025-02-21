@@ -65,7 +65,7 @@ public class EmpresaController {
      */
     @GetMapping("/{eid}")
     public ResponseEntity<Empresa> getById(@PathVariable BigInteger eid) {
-        return services.empresaFindById(eid)
+        return services.findEmpresaById(eid)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }

@@ -24,36 +24,38 @@ import java.util.regex.Pattern;
 @Service
 public class UsuarioServices {
 
+    //Dempendencias
     @Autowired
     private UsuarioRepository repository;
 
     @Autowired
     private MailServices mailServices;
 
-    // Retorna todos os usuários como uma lista de DTOs (Data Transfer Objects)
+    /*
+     * Retorna todas us usuários usando o stream para passar po cada um dos elmentos da lista
+     *  e o map para fazer uma modificação nesses elemento. No caso alí é para criar um novo record
+     * com as informações buscadas.
+     * */
     public List<UsuarioResponseDTO> usuariosGetAll() {
         // Converte a lista de entidades Usuario para DTOs
-        List<UsuarioResponseDTO> listausuarios = repository.findAll().stream().map(UsuarioResponseDTO::new).toList();
-        return listausuarios;
+        return repository.findAll()
+                .stream()
+                .map(UsuarioResponseDTO::new)
+                .toList();
     }
 
-    // Retorna um usuário a partir do ID (utilizando BigInteger como tipo de ID)
+    /*
+    * Retorna um usuário que contenha o id informado
+    * */
     public Optional<Usuario> usuariofindById(BigInteger id) {
         return repository.findById(id);
     }
 
-    // Retorna uma lista de usuários para a parte de exibição de curriculos na página principal
-/*
-    public List<UsuarioResponseDTO> buscarComLimite(){
-        Pageable pageable = PageRequest.of(0, 30);
-        return repository.buscarComLimite(pageable);
-    }/*
-
-    public List<UsuarioResponseDTO> buscarUsuariosPorCompetencias(List<String> competencias) {
-        return repository.buscarUsuariosPorCompetencias(competencias, (long) competencias.size());
-    }*/
-
+    /*
+    * Envia um email para o soporte da equipe contendo a mensagem do usuário
+    * */
     public void enviarEmailSuporte(SuportEmailDTO data){
+        //Email de agradecimento ao usuário pelo envio da mensagem
         mailServices.enviarEmailTexto(
                 data.email(),
                 "Suporte contratanti",
@@ -61,15 +63,24 @@ public class UsuarioServices {
                         "Gostariamos de aguadecer por entrar em contato com o nosso suporte tecnico, resolveremos a sua solicitação o quanto antes\n\n" +
                         "Atenciosamente,\nEquipe Contratanti."
         );
+
+        //Envia o email para nós mesmos para análise futura
         mailServices.enviarEmailTexto(
                 "contratanti@gmail.com",
                 "Suporte contratanti",
                 "Foi enivado do usuário" + data.nome() + ",\n\n" +
-                        "uma mensagem o nosso suporte, conteúdo: " + data.mensagem()
+                        "uma mensagem do nosso suporte, conteúdo: " + data.mensagem()
         );
     }
 
-    // Salva um novo usuário no banco de dados após realizar validações e criptografar a senha
+    /*
+    * Salva um novo usuário, validanod informações como:
+    * Se o email é nulo
+    * Se o email já existe
+    * Se o telefone é válido
+    * Se o email é válido
+    * Criptografia da senha que será salva no banco
+    * */
     public ResponseEntity<Object> saveUsuario(UsuarioRequestDTO data) {
         Usuario usuariodata = new Usuario(data);
 
@@ -105,7 +116,9 @@ public class UsuarioServices {
     }
 
 
-    // Atualiza os dados de um usuário existente
+    /*
+    * Atualiza usuário já existente no banco com informações válidas
+    * */
     public Usuario usuarioUpdate(BigInteger uid, UsuarioRequestDTO usuarioAtualizado) {
         // Busca o usuário pelo ID
         Usuario usuarioExistente = repository.findById(uid)
@@ -160,12 +173,16 @@ public class UsuarioServices {
         return repository.save(usuarioExistente);
     }
 
-    // Deleta todos os usuários do banco de dados
+    /*
+    * Deleta todos os usuários no banco de dados
+    * */
     public void usuarioDeleteAll() {
         repository.deleteAll();
     }
 
-    // Deleta um usuário pelo ID
+    /*
+    * Deleta um usuário com o id informado
+    * */
     public void usuarioDeleteById(BigInteger id) {
         Usuario usuario = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Empresa não encontrada com ID: " + id));
@@ -184,12 +201,24 @@ public class UsuarioServices {
         repository.delete(usuario);
     }
 
+    /*
+    *
+    *
+    *
+    * Voltar aqui depois
+    *
+    *
+    *
+    * */
+
     // Método auxiliar para salvar um usuário
     public void saveUsuario(Usuario usuario) {
         repository.save(usuario);
     }
 
-    // Valida uma string para permitir somente letras e números, prevenindo SQL Injection e outros ataques
+    /*
+    * Válida um texto para somente caracteres permitidos
+    * */
     public String validarString(String linha) {
         Pattern pattern = Pattern.compile("^[A-Za-z1-9]$");
         Matcher matcher = pattern.matcher(linha);
@@ -199,7 +228,9 @@ public class UsuarioServices {
         return "";
     }
 
-    // Valida se o e-mail tem um formato correto
+    /*
+    * Válida o email
+    * */
     public boolean validarEmail(String email) {
         Pattern pattern = Pattern.compile(
                 "^[_A-Za-z0-9-+]+(\\.[_A-Za-z0-9-]+)*@"
@@ -208,7 +239,9 @@ public class UsuarioServices {
         return pattern.matcher(email).find();
     }
 
-    // Valida um número de telefone, garantindo que ele siga um formato correto
+    /*
+    * Válida um número de telefone
+    * */
     public boolean validarTelefone(String telefone) {
         // Verifica se o telefone é nulo ou vazio
         if (telefone == null || telefone.isBlank()) {

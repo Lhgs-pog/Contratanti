@@ -20,60 +20,76 @@ import java.util.regex.Pattern;
 @Service
 public class EmpresaServices {
 
+    //Dependencias
     @Autowired
     private EmpresaRepository repository;
 
     @Autowired
     private MailServices mailServices;
 
-    /**
-     * Retorna uma lista de todas as empresas cadastradas como DTOs.
-     */
+    /*
+    * Retorna todas as empresas usando o stream para passar po cada um dos elmentos da lista
+    *  e o map para fazer uma modificação nesses elemento. No caso alí é para criar um novo record
+    * com as informações buscadas.
+    * */
     public List<EmpresaResponseDTO> findAllEmpresas() {
         return repository.findAll().stream()
                 .map(EmpresaResponseDTO::new)
                 .toList();
     }
 
-    /**
-     * Busca uma empresa pelo ID.
-     */
+    /*
+    * Usa o Jpa para buscar um usuário com o id passado
+    * */
     public Optional<Empresa> findEmpresaById(BigInteger id) {
         return repository.findById(id);
     }
 
-    /**
-     * Salva uma nova empresa e envia e-mail de boas-vindas.
-     */
+    /*
+    * Processo para salvar uma nova empresa, onde é avaliado:
+    * Se o campo email está preenchido.
+    * Se alguma empresa já usa este email
+    * Se o cnpj, telefone e email estão em um formato válido
+    * Criptografa a senha para salvar no banco
+    * Envia um emial de boas vindas
+    * */
     @Transactional
     public ResponseEntity<Empresa> saveEmpresa(EmpresaRequestDTO data) {
+        //Verifica se o email existe
         if (data.email() == null || data.email().isBlank()) {
             throw new IllegalArgumentException("O email não pode ser nulo ou vazio");
         }
 
+        //Verifica se o email já existe
         if (repository.findByEmail(data.email()) != null) {
             throw new IllegalArgumentException("O email já está registrado");
         }
 
-        if (data.email() == null){
-
-        }else if (!EmpresaServices.validarTelefone(data.telefone())) {
+        //Verifica se o telefone está em um formato válido
+        if (!EmpresaServices.validarTelefone(data.telefone())) {
             throw new IllegalArgumentException("O telefone informado não é válido");
         }
 
+        //Verifica se o email está em um formato válido
         if (!EmpresaServices.validarEmail(data.email())) {
             throw new IllegalArgumentException("O email informado não é válido");
         }
 
+        //Verifica se o cnpj está em um formato válido
         if (!EmpresaServices.validarCnpj(data.cnpj())) {
             throw new IllegalArgumentException("O CNPJ informado não é válido");
         }
 
+        //Após todas as verificações cria uma nova empresa com esses dados.
         Empresa empresa = new Empresa(data);
+
+        //Criptografa a senha da empresa
         empresa.setSenha(new BCryptPasswordEncoder().encode(data.senha()));
 
+        //Salva usando o jpa
         repository.save(empresa);
 
+        //Envia um email e boas vindas
         mailServices.enviarEmailTexto(
                 empresa.getEmail(),
                 "Bem-vindo!",
@@ -86,12 +102,15 @@ public class EmpresaServices {
 
 
 
-    /**
-     * Atualiza os dados de uma empresa e notifica o cliente via e-mail.
-     */
+    /*
+    * Atualiza uma empresa já cadatrada passando por verificações de:
+    * Se a empresa realmente existe no banco de dados
+    * Se o cnpj já está em uso
+    * Se o telefone, email e cnpj está em formato válido
+    * */
     @Transactional
     public Empresa updateEmpresa(BigInteger eid, Empresa empAtualizada) {
-        // Busca a empresa pelo ID
+        // Busca a empresa pelo já existente com o ID passado
         Empresa empresaExistente = repository.findById(eid)
                 .orElseThrow(() -> new ResourceNotFoundException("Empresa não encontrada"));
 
@@ -108,9 +127,7 @@ public class EmpresaServices {
         }
 
         // Validação de telefone
-        if (empAtualizada.getTelefone() == null){
-
-        }else if (empAtualizada.getTelefone() == null || !EmpresaServices.validarTelefone(empAtualizada.getTelefone())) {
+        if (empAtualizada.getTelefone() == null || !EmpresaServices.validarTelefone(empAtualizada.getTelefone())) {
             throw new IllegalArgumentException("O telefone informado não é válido.");
         }
 
@@ -150,21 +167,15 @@ public class EmpresaServices {
         return empresaAtualizada;
     }
 
-
-    public Optional<Empresa> empresaFindById(BigInteger eid) {
-        return repository.findById(eid);
-    }
-        // Reto
-
-
-        /**
-         * Deleta uma empresa pelo ID e notifica o cliente.
-         */
-    @Transactional
+    /*
+    * Deleta um empresa no banco e dados com id informado
+    * */
     public void deleteEmpresaById(BigInteger id) {
+        //Verifica se a empresa existe
         Empresa emp = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Empresa não encontrada com ID: " + id));
 
+        //Envio de email de notificação
         mailServices.enviarEmailTexto(
                 emp.getEmail(),
                 "Conta Excluída",
@@ -177,22 +188,27 @@ public class EmpresaServices {
         repository.delete(emp);
     }
 
-    /**
-     * Deleta todas as empresas cadastradas.
-     */
+    /*
+    * Apaga todas as empresas salvas no banco e dados
+    * */
     @Transactional
     public void deleteAllEmpresas() {
         repository.deleteAll();
     }
-    /**
-     * Valida uma string para conter apenas letras e números.
-     */
+
+    /*
+    * Formata textos para somente carcateres permitidos
+    * */
     public String validarString(String linha) {
         if (Pattern.matches("^[A-Za-z0-9]+$", linha)) {
             return linha;
         }
         return "";
     }
+
+    /*
+    * Válida se um cnpj é válido
+    * */
     public static boolean validarCnpj(String cnpj) {
         // Remove caracteres não numéricos
         cnpj = cnpj.replaceAll("\\D", "");
@@ -234,9 +250,9 @@ public class EmpresaServices {
     }
 
 
-    /**
-     * Valida um e-mail.
-     */
+    /*
+    * Verifica se um email é válido
+    * */
     public static boolean validarEmail(String email) {
         return Pattern.matches(
                 "^[\\w-.]+@[\\w-]+\\.[a-z]{2,}$",
@@ -244,9 +260,9 @@ public class EmpresaServices {
         );
     }
 
-    /**
-     * Valida um número de telefone.
-     */
+    /*
+    * Veridica se um telefone é válido
+    * */
     public static boolean validarTelefone(String telefone) {
         //verifica se o telefone é nulo ou vazio
         if (telefone == null || telefone.isEmpty()) {
@@ -271,6 +287,9 @@ public class EmpresaServices {
         return validarDDD(telefone) && validarPrefixo(telefone);
     }
 
+    /*
+    * Verifica se o ddd é um válido
+    * */
     private static boolean validarDDD(String telefone) {
         Integer[] dddsValidos = {
                 11, 12, 13, 14, 15, 16, 17, 18, 19,
@@ -286,6 +305,9 @@ public class EmpresaServices {
         return List.of(dddsValidos).contains(ddd);
     }
 
+    /*
+    * Válida o prefixo do telefone
+    * */
     private static boolean validarPrefixo(String telefone) {
         Integer[] prefixosValidos = {2, 3, 4, 5, 7};
         int prefixo = Integer.parseInt(telefone.substring(2, 3));
