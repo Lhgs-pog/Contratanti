@@ -132,7 +132,6 @@ public class EmpresaServices {
         empresaExistente.setEmail(empAtualizada.getEmail());
         empresaExistente.setCnpj(empAtualizada.getCnpj());
         empresaExistente.setTelefone(empAtualizada.getTelefone());
-        empresaExistente.setDescricao(empAtualizada.getDescricao());
         empresaExistente.setSenha(encryptedPassword);
 
         // Salva a empresa atualizada no banco de dados

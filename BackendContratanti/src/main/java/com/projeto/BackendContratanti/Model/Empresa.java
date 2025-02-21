@@ -39,8 +39,6 @@ public class Empresa implements UserDetails {
     private String telefone;
     @Column(name = "CNPJ",nullable = false,length = 14,unique = true)
     private String cnpj;
-    @Column(name = "DESCRICAO",columnDefinition = "TEXT",nullable = true)
-    private String descricao;
     @Column(name = "LINK_LINKEDIN",columnDefinition = "TEXT",nullable = true)
     private String url_linkedin;
     @Column(name = "SENHA",nullable = false, length = 100)
@@ -51,7 +49,6 @@ public class Empresa implements UserDetails {
         this.email=dto.email();
         this.telefone= dto.telefone();
         this.cnpj= dto.cnpj();
-        this.descricao= dto.descricao();
         this.url_linkedin= dto.url_linkedin();
         this.senha= dto.senha();
     }

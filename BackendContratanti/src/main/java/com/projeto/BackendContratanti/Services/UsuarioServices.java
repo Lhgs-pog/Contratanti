@@ -91,10 +91,6 @@ public class UsuarioServices {
             throw new IllegalArgumentException("O email informado não é válido.");
         }
 
-        // Validação de formato do cpf
-        /*if (!UsuarioServices.validarCpf (usuariodata.getCpf())) {
-            throw new IllegalArgumentException("O cpf informado não é válido.");
-        } */
         // Criptografa a senha antes de salvar
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.senha());
 
@@ -115,12 +111,6 @@ public class UsuarioServices {
         Usuario usuarioExistente = repository.findById(uid)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
 
-        // Verifica se o CPF já existe no banco e se pertence a outro usuário
-        Optional<Usuario> usuarioComMesmoCpf = repository.findByCpf(usuarioAtualizado.cpf());
-        if (usuarioComMesmoCpf.isPresent() && !usuarioComMesmoCpf.get().getId().equals(uid)) {
-            throw new DataIntegrityViolationException("O CPF informado já está em uso por outro usuário.");
-        }
-
         // Verifica se o e-mail já existe no banco e se pertence a outro usuário
         Optional<Usuario> usuarioComMesmoEmail = repository.findOptionalByEmail(usuarioAtualizado.email());
         if (usuarioComMesmoEmail.isPresent() && !usuarioComMesmoEmail.get().getId().equals(uid)) {
@@ -134,7 +124,6 @@ public class UsuarioServices {
         // Atualiza os dados do usuário
         usuarioExistente.setNome(usuarioAtualizado.nome());
         usuarioExistente.setEmail(usuarioAtualizado.email());
-        usuarioExistente.setCpf(usuarioAtualizado.cpf());
         usuarioExistente.setCidade(usuarioAtualizado.cidade());
         usuarioExistente.setDescricao(usuarioAtualizado.descricao());
         usuarioExistente.setTelefone(usuarioAtualizado.telefone());
@@ -156,11 +145,6 @@ public class UsuarioServices {
         }else if (!EmpresaServices.validarEmail (usuarioExistente.getEmail())){
             throw new IllegalArgumentException("O email informado não é válido.");
         }
-
-        // Validação de formato do cpf
-        /*if (!UsuarioServices.validarCpf (usuarioExistente.getCpf())) {
-            throw new IllegalArgumentException("O cnpj informado não é válido.");
-        }*/
 
         // Envia um e-mail confirmando a atualização dos dados
         mailServices.enviarEmailTexto(
@@ -214,48 +198,6 @@ public class UsuarioServices {
             return linha;
         return "";
     }
-
-    // Valida um CPF, verificando sua estrutura e dígitos
-    public static boolean validarCpf(String cpf) {
-        // Remove caracteres não numéricos
-        cpf = cpf.replaceAll("\\D", "");
-
-        // Verifica se o CPF tem exatamente 11 dígitos e não é uma sequência repetida
-        if (cpf.length() != 11 || cpf.matches("(\\d)\\1{10}")) {
-            return false;
-        }
-
-        char dig10, dig11;
-        int soma, peso, num, resto;
-
-        // Cálculo do 1º dígito verificador
-        soma = 0;
-        peso = 10;
-        for (int i = 0; i < 9; i++) {
-            num = cpf.charAt(i) - '0'; // Converte char para número
-            soma += num * peso;
-            peso--;
-        }
-
-        resto = soma % 11;
-        dig10 = (resto < 2) ? '0' : (char) ((11 - resto) + '0');
-
-        // Cálculo do 2º dígito verificador
-        soma = 0;
-        peso = 11;
-        for (int i = 0; i < 10; i++) {
-            num = cpf.charAt(i) - '0';
-            soma += num * peso;
-            peso--;
-        }
-
-        resto = soma % 11;
-        dig11 = (resto < 2) ? '0' : (char) ((11 - resto) + '0');
-
-        // Verifica se os dígitos calculados correspondem aos dígitos fornecidos
-        return dig10 == cpf.charAt(9) && dig11 == cpf.charAt(10);
-    }
-
 
     // Valida se o e-mail tem um formato correto
     public boolean validarEmail(String email) {

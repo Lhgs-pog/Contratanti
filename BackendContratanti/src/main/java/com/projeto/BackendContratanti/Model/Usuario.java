@@ -51,8 +51,6 @@ public class Usuario implements UserDetails {
     private String url_linkedin;
     @Column(name = "LINK_GITHUB",columnDefinition = "TEXT",nullable = true)
     private String url_github;
-    @Column(name = "CPF",nullable = false,length = 11,unique = true)
-    private String cpf;
     @Column(name = "CIDADE_NOME",nullable = true,length = 255)
     private String cidade;
     @Column(name = "SENHA",nullable = false,length = 100)
@@ -66,7 +64,6 @@ public class Usuario implements UserDetails {
     public Usuario(UsuarioRequestDTO data){
         this.nome = data.nome();
         this.cidade = data.cidade();
-        this.cpf = data.cpf();
         this.descricao = data.descricao();
         this.email = data.email();
         this.senha = data.senha();
